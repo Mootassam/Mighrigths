@@ -154,7 +154,7 @@ export default function News({ navigation }) {
 
   return (
     <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: "always" }}>
-      <Header   title={t("MIGRIGTHS")} />
+      <Header   title={t("MIGRIGHTS")} />
       <View
         style={{
       

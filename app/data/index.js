@@ -1,15 +1,4 @@
-import { LanguageData } from "./language";
-import { NotificationData } from "./notification";
+import { Country } from "./country";
 
 // Sample data for display on template
-export {
-
-  LanguageData,
-
-
-
-  NotificationData,
-
-
-
-};
+export { Country };

@@ -29,7 +29,7 @@ export default function Loading({ navigation }) {
       <Image source={Images.logo} style={styles.logo} resizeMode="contain" />
       <View style={styles.content}>
         <Text title1 whiteColor semibold>
-          Mighrights
+          MigRights
         </Text>
         <ActivityIndicator
           size="large"

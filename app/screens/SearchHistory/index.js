@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { BaseStyle, BaseColor, useTheme,authAxios } from "@config";
+import { BaseStyle, BaseColor, useTheme, authAxios } from "@config";
 import {
   Header,
   SafeAreaView,
@@ -19,7 +19,7 @@ import {
 } from "@components";
 import styles from "./styles";
 import { useTranslation } from "react-i18next";
-import {useSelector} from 'react-redux';
+import { useSelector } from "react-redux";
 
 export default function SearchHistory({ navigation }) {
   const { colors } = useTheme();
@@ -33,19 +33,20 @@ export default function SearchHistory({ navigation }) {
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
-  const language = useSelector(state => state.application.language);
+  const language = useSelector((state) => state.application.language);
 
   useEffect(() => {
     setLoading(true);
 
-      
-      setLoading(true);
-      authAxios.get('/tenant/60a6837c57b965001ed6ec2e/informations').then(res => {
- 
+    setLoading(true);
+    authAxios
+      .get("/tenant/60c51f8230277e001e03918c/informations")
+      .then((res) => {
         setFilteredDataSource(res.data.rows);
         setMasterDataSource(res.data.rows);
         setLoading(false);
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.error(error);
       });
   }, []);
@@ -57,35 +58,30 @@ export default function SearchHistory({ navigation }) {
       // Filter the masterDataSource
       // Update FilteredDataSource
 
-
       const newData = masterDataSource.filter(function (item) {
-      
-        if(language === "fr"){
-        const itemData = (item.titleFR + item.descriptionFR )
-          ? (item.titleFR.toUpperCase() +  item.descriptionFR.toUpperCase() )
-          : "".toUpperCase();
+        if (language === "fr") {
+          const itemData =
+            item.titleFR + item.descriptionFR
+              ? item.titleFR.toUpperCase() + item.descriptionFR.toUpperCase()
+              : "".toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        } else if (language === "en") {
+          const itemData =
+            item.titreEN + item.descriptionEN
+              ? item.titreEN.toUpperCase() + item.descriptionEN.toUpperCase()
+              : "".toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        } else if (language === "ar") {
+          const itemData =
+            item.titreAR + item.descriptionAR
+              ? item.titreAR.toUpperCase() + item.descriptionAR.toUpperCase()
+              : "".toUpperCase();
           const textData = text.toUpperCase();
           return itemData.indexOf(textData) > -1;
         }
-        else if(language === "en"){
-          const itemData = (item.titreEN + item.descriptionEN )
-          ? (item.titreEN.toUpperCase() +  item.descriptionEN.toUpperCase() )
-          : "".toUpperCase();
-          const textData = text.toUpperCase();
-          return itemData.indexOf(textData) > -1;
-      }
-      else if(language === "ar"){
-        const itemData = (item.titreAR + item.descriptionAR )
-        ? (item.titreAR.toUpperCase() +  item.descriptionAR.toUpperCase() )
-        : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      }
-
-    
       });
-      
-
 
       setFilteredDataSource(newData);
       setSearch(text);
@@ -98,26 +94,23 @@ export default function SearchHistory({ navigation }) {
   };
 
   const ItemView = ({ item }) => {
-
-    
-    if(language === "en"){
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          /* 1. Navigate to the Details route with params */
-          navigation.navigate("HotelDetail", {
-            infoId: item._id,
-          });
-        }}
-      >
-        <SearchH
-          title={item.titreEN}
-          description={item.descriptionEN}
-        ></SearchH>
-      </TouchableOpacity>
-    )}
-
-    else if(language === "fr"){
+    if (language === "en") {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            /* 1. Navigate to the Details route with params */
+            navigation.navigate("HotelDetail", {
+              infoId: item._id,
+            });
+          }}
+        >
+          <SearchH
+            title={item.titreEN}
+            description={item.descriptionEN}
+          ></SearchH>
+        </TouchableOpacity>
+      );
+    } else if (language === "fr") {
       return (
         <TouchableOpacity
           onPress={() => {
@@ -132,28 +125,24 @@ export default function SearchHistory({ navigation }) {
             description={item.descriptionFR}
           ></SearchH>
         </TouchableOpacity>
-      )}
-
-
-      else if(language === "ar"){
-        return (
-          <TouchableOpacity
-            onPress={() => {
-              /* 1. Navigate to the Details route with params */
-              navigation.navigate("HotelDetail", {
-                infoId: item._id,
-              });
-            }}
-          >
-            <SearchH
-              title={item.titreAR}
-              description={item.descriptionAR}
-            ></SearchH>
-          </TouchableOpacity>
-        )}
-
-
-    
+      );
+    } else if (language === "ar") {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            /* 1. Navigate to the Details route with params */
+            navigation.navigate("HotelDetail", {
+              infoId: item._id,
+            });
+          }}
+        >
+          <SearchH
+            title={item.titreAR}
+            description={item.descriptionAR}
+          ></SearchH>
+        </TouchableOpacity>
+      );
+    }
   };
 
   return (

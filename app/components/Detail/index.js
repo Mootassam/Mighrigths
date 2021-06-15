@@ -5,8 +5,8 @@ import styles from "./styles";
 import * as Utils from "@utils";
 import { useTheme } from "@config";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import YoutubePlayer from "react-native-youtube-iframe";
 import Snackbar from "react-native-snackbar";
+import YouTube from "react-native-youtube";
 
 import {
   View,
@@ -17,7 +17,7 @@ import {
   Linking,
 } from "react-native";
 import { Text, HelpBlock, Icon } from "@components";
-import { WebView } from "react-native-webview";
+
 import RNFetchBlob from "rn-fetch-blob";
 
 function Detail(props, navigation) {
@@ -40,6 +40,9 @@ function Detail(props, navigation) {
   const [heightHeader, setHeightHeader] = useState(Utils.heightHeader());
   const [renderMapView, setRenderMapView] = useState(false);
 
+  onFileDownload = () => {
+    //
+  };
   useEffect(() => {
     InteractionManager.runAfterInteractions(() => {
       setRenderMapView(true);
@@ -133,7 +136,7 @@ function Detail(props, navigation) {
         <View style={{ flexDirection: "row" }}>
           <Icon
             style={{ paddingRight: 12 }}
-            name="file-upload"
+            name="download"
             size={20}
             color={colors.accent}
             enableRTL={true}
@@ -263,17 +266,19 @@ function Detail(props, navigation) {
       ) : null}
 
       {iframe ? (
-        <View
-          style={
-            ([styles.blockView, { borderBottomColor: colors.border }],
-            { flex: 1 })
-          }
-        >
-          <Text headline semibold>
+        <View style={[styles.blockView, { borderBottomColor: colors.border }]}>
+          <Text headline semibold style={{ paddingBottom: 15 }}>
             {t("video")}
           </Text>
-          <Text body2 numberOfLines={2}></Text>
-          <YoutubePlayer height={300} videoId={iframe} />
+          <YouTube
+            apiKey="AIzaSyA5mS2M8ZIH9jdEtrjvKKUkkOR5argUl2M"
+            videoId={iframe} // The YouTube video ID
+            play={false} // control playback of video with true/false
+            fullscreen={false} // control whether the video should play in fullscreen or inline
+            autoplay={false}
+            loop // control whether the video should loop when ended
+            style={{ alignSelf: "stretch", height: 300 }}
+          />
         </View>
       ) : null}
     </View>
@@ -289,7 +294,7 @@ Detail.propTypes = {
   email: PropTypes.string,
   latitude: PropTypes.string,
   longitude: PropTypes.string,
-  document: PropTypes.object,
+  document: PropTypes.array,
   iframe: PropTypes.string,
   onPress: PropTypes.func,
 };
@@ -319,8 +324,8 @@ function areEqual(prevProps, nextProps) {
     nextProps.email === prevProps.email &&
     nextProps.latitude === prevProps.latitude &&
     nextProps.longitude === prevProps.longitude &&
-    nextProps.iframe === prevProps.iframe &&
-    nextProps.document === prevProps.document
+    nextProps.document === prevProps.document &&
+    nextProps.iframe === prevProps.iframe
   );
 }
 export default React.memo(Detail, areEqual);

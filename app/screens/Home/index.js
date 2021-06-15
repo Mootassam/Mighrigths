@@ -14,10 +14,10 @@ export default function News({ navigation }) {
   const language = useSelector((state) => state.application.language);
   const [offset, setOffset] = useState(6);
 
-  const onScroll = useCallback(() => { 
+  const onScroll = useCallback(() => {
     setRefreshing(true);
-    authAxios 
-      .get(`tenant/60a6837c57b965001ed6ec2e/informations`)
+    authAxios
+      .get(`tenant/60c51f8230277e001e03918c/informations`)
       .then((json) => {
         setInformation(json.data.rows);
         setRefreshing(false);
@@ -39,7 +39,7 @@ export default function News({ navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60a6837c57b965001ed6ec2e/informations?limit=${offset}`)
+      .get(`tenant/60c51f8230277e001e03918c/informations?limit=${offset}`)
       .then((json) => {
         setOffset(offset + 6);
         setInformation(json.data.rows);
@@ -70,28 +70,29 @@ export default function News({ navigation }) {
    */
 
   const ItemView = ({ item }) => {
-
-
     switch (language) {
       case "fr":
-        return(   <HotelItem
-          block
-          image={item.images[0]}
-          name={item.titleFR}
-          location={item.updatedAt}
-          style={{
-            paddingBottom: 10,
-          }}
-          onPress={() => {
-            /* 1. Navigate to the Details route with params */
-            navigation.navigate("HotelDetail", {
-              infoId: item._id,
-            });
-          }}
-        />)
+        return (
+          <HotelItem
+            block
+            image={item.images[0]}
+            name={item.titleFR}
+            location={item.updatedAt}
+            style={{
+              paddingBottom: 10,
+            }}
+            onPress={() => {
+              /* 1. Navigate to the Details route with params */
+              navigation.navigate("HotelDetail", {
+                infoId: item._id,
+              });
+            }}
+          />
+        );
         break;
-        case "en":
-          return(  <HotelItem
+      case "en":
+        return (
+          <HotelItem
             block
             image={item.images[0]}
             name={item.titreEN}
@@ -105,28 +106,30 @@ export default function News({ navigation }) {
                 infoId: item._id,
               });
             }}
-          />)
-          break;
+          />
+        );
+        break;
 
-          case "ar":
-            return( <HotelItem
-              block
-              image={item.images[0]}
-              name={item.titreAR}
-              location={item.updatedAt}
-              style={{
-                paddingBottom: 10,
-              }}
-              onPress={() => {
-                /* 1. Navigate to the Details route with params */
-                navigation.navigate("HotelDetail", {
-                  infoId: item._id,
-                });
-              }}
-            />)
-            break;  
+      case "ar":
+        return (
+          <HotelItem
+            block
+            image={item.images[0]}
+            name={item.titreAR}
+            location={item.updatedAt}
+            style={{
+              paddingBottom: 10,
+            }}
+            onPress={() => {
+              /* 1. Navigate to the Details route with params */
+              navigation.navigate("HotelDetail", {
+                infoId: item._id,
+              });
+            }}
+          />
+        );
+        break;
     }
-    
   };
 
   /**
@@ -181,10 +184,10 @@ export default function News({ navigation }) {
     );
   };
 
-  return ( 
+  return (
     <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: "always" }}>
       <Header
-        title={t("MIGRITHS")}
+        title={t("MIGRIGHTS")}
         subTitle=""
         renderRight={() => {
           return <Icon name="search" size={22} color={colors.primary} />;

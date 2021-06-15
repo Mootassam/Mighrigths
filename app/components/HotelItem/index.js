@@ -64,7 +64,8 @@ function HotelItem(props) {
         <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
      
             <Image
-              source={no_image}
+                 resizeMode={"cover"}
+                 source={no_image}
               style={styles.listImage}
             />
         

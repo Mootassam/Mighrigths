@@ -42,7 +42,7 @@ export default function SearchHistory({ route, navigation }) {
 
     authAxios
       .get(
-        `tenant/60a6837c57b965001ed6ec2e/informations?filter[category]=${infoId}`
+        `tenant/60c51f8230277e001e03918c/informations?filter[category]=${infoId}`
       )
       .then((json) => {
         setFilteredDataSource(json.data.rows);

@@ -22,7 +22,7 @@ export default function HotelDetail({ route, navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60a6837c57b965001ed6ec2e/informations/${infoId}`)
+      .get(`tenant/60c51f8230277e001e03918c/informations/${infoId}`)
       .then((json) => {
         setcategory([json.data]);
         for (const iterator of json.data.images) {
@@ -38,7 +38,6 @@ export default function HotelDetail({ route, navigation }) {
         if (json.data.videos) {
           const post0 = json.data.videos.split("watch?v=")[1];
           const iframe = post0.split("&")[0];
-
           setIframe(iframe);
         }
         setRefreshing(false);
@@ -70,7 +69,6 @@ export default function HotelDetail({ route, navigation }) {
             longitude={longitude}
             document={document}
             iframe={iframe}
-       
           />
         );
         break;
@@ -88,7 +86,6 @@ export default function HotelDetail({ route, navigation }) {
             longitude={longitude}
             document={document}
             iframe={iframe}
-    
           />
         );
         break;
@@ -106,7 +103,6 @@ export default function HotelDetail({ route, navigation }) {
             longitude={longitude}
             document={document}
             iframe={iframe}
-         
           />
         );
         break;

@@ -1,12 +1,11 @@
-
-import Axios from 'axios';
+import Axios from "axios";
 
 export const authAxios = Axios.create({
-  baseURL: `http://139.177.183.159:3000/api`,
+  baseURL: `http://85.159.212.11:3000/api`,
   timeout: 1800,
-    headers: {
-    'Content-Type': 'application/json'
-  }
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // authAxios.interceptors.request.use(
@@ -23,4 +22,3 @@ export const authAxios = Axios.create({
 //     return Promise.reject(error);
 //   },
 // );
-

@@ -1,48 +1,48 @@
-import React from 'react';
-import {Text, StyleSheet} from 'react-native';
-import PropTypes from 'prop-types';
-import {Typography, FontWeight, BaseColor, useTheme, useFont} from '@config';
+import React from "react";
+import { Text, StyleSheet } from "react-native";
+import PropTypes from "prop-types";
+import { Typography, FontWeight, BaseColor, useTheme, useFont } from "@config";
 
 const Roboto = {
-  100: 'Thin',
-  200: 'Thin',
-  300: 'Light',
-  400: 'Regular',
-  500: 'Medium',
-  600: 'Medium',
-  700: 'Bold',
-  800: 'Bold',
-  900: 'Black',
-  normal: 'Regular',
-  bold: 'Bold',
+  100: "Thin",
+  200: "Thin",
+  300: "Light",
+  400: "Regular",
+  500: "Medium",
+  600: "Medium",
+  700: "Bold",
+  800: "Bold",
+  900: "Black",
+  normal: "Regular",
+  bold: "Bold",
 };
 
 const Raleway = {
-  100: 'Thin',
-  200: 'ExtraLight',
-  300: 'Light',
-  400: 'Regular',
-  500: 'Medium',
-  600: 'SemiBold',
-  700: 'Bold',
-  800: 'ExtraBold',
-  900: 'Black',
-  normal: 'Regular',
-  bold: 'Bold',
+  100: "Thin",
+  200: "ExtraLight",
+  300: "Light",
+  400: "Regular",
+  500: "Medium",
+  600: "SemiBold",
+  700: "Bold",
+  800: "ExtraBold",
+  900: "Black",
+  normal: "Regular",
+  bold: "Bold",
 };
 
 const Merriweather = {
-  100: 'Light',
-  200: 'Light',
-  300: 'Light',
-  400: 'Regular',
-  500: 'Regular',
-  600: 'Bold',
-  700: 'Bold',
-  800: 'Bold',
-  900: 'Black',
-  normal: 'Regular',
-  bold: 'Bold',
+  100: "Light",
+  200: "Light",
+  300: "Light",
+  400: "Regular",
+  500: "Regular",
+  600: "Bold",
+  700: "Bold",
+  800: "Bold",
+  900: "Black",
+  normal: "Regular",
+  bold: "Bold",
 };
 
 export default function Index(props) {
@@ -89,11 +89,11 @@ export default function Index(props) {
     children,
   } = props;
 
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const font = useFont();
 
   let textStyle = StyleSheet.flatten([
-    {fontFamily: font, textAlign},
+    { fontFamily: font, textAlign },
     header && Typography.header,
     title1 && Typography.title1,
     title2 && Typography.title2,
@@ -108,49 +108,49 @@ export default function Index(props) {
     caption2 && Typography.caption2,
     overline && Typography.overline,
     //custom for font
-    thin && {fontWeight: FontWeight.thin},
-    ultraLight && {fontWeight: FontWeight.ultraLight},
-    light && {fontWeight: FontWeight.light},
-    regular && {fontWeight: FontWeight.regular},
-    medium && {fontWeight: FontWeight.medium},
-    semibold && {fontWeight: FontWeight.semibold},
-    bold && {fontWeight: FontWeight.bold},
-    heavy && {fontWeight: FontWeight.heavy},
-    black && {fontWeight: FontWeight.black},
+    thin && { fontWeight: FontWeight.thin },
+    ultraLight && { fontWeight: FontWeight.ultraLight },
+    light && { fontWeight: FontWeight.light },
+    regular && { fontWeight: FontWeight.regular },
+    medium && { fontWeight: FontWeight.medium },
+    semibold && { fontWeight: FontWeight.semibold },
+    bold && { fontWeight: FontWeight.bold },
+    heavy && { fontWeight: FontWeight.heavy },
+    black && { fontWeight: FontWeight.black },
     // default color
-    {color: colors.text},
+    { color: colors.text },
     //custom for color
-    primaryColor && {color: colors.primary},
-    darkPrimaryColor && {color: colors.primaryDark},
-    lightPrimaryColor && {color: colors.primaryLight},
-    accentColor && {color: colors.accent},
-    grayColor && {color: BaseColor.grayColor},
-    dividerColor && {color: BaseColor.dividerColor},
-    whiteColor && {color: BaseColor.whiteColor},
-    fieldColor && {color: BaseColor.fieldColor},
+    primaryColor && { color: colors.primary },
+    darkPrimaryColor && { color: colors.primaryDark },
+    lightPrimaryColor && { color: colors.primaryLight },
+    accentColor && { color: colors.accent },
+    grayColor && { color: BaseColor.grayColor },
+    dividerColor && { color: BaseColor.dividerColor },
+    whiteColor && { color: BaseColor.whiteColor },
+    fieldColor && { color: BaseColor.fieldColor },
     style && style,
   ]);
 
   if (textStyle.fontFamily) {
-    const fontStyle = textStyle.fontStyle == 'italic' ? 'Italic' : '';
+    const fontStyle = textStyle.fontStyle == "italic" ? "Italic" : "";
     switch (textStyle.fontFamily) {
-      case 'Raleway':
+      case "Raleway":
         textStyle.fontFamily = `${textStyle.fontFamily}-${
-          Raleway[textStyle.fontWeight] == 'Regular'
+          Raleway[textStyle.fontWeight] == "Regular"
             ? Raleway[textStyle.fontWeight]
             : Raleway[textStyle.fontWeight] + fontStyle
         }`;
         break;
-      case 'Roboto':
+      case "Roboto":
         textStyle.fontFamily = `${textStyle.fontFamily}-${
-          Roboto[textStyle.fontWeight] == 'Regular'
+          Roboto[textStyle.fontWeight] == "Regular"
             ? Roboto[textStyle.fontWeight]
             : Roboto[textStyle.fontWeight] + fontStyle
         }`;
         break;
-      case 'Merriweather':
+      case "Merriweather":
         textStyle.fontFamily = `${textStyle.fontFamily}-${
-          Merriweather[textStyle.fontWeight] == 'Regular'
+          Merriweather[textStyle.fontWeight] == "Regular"
             ? Merriweather[textStyle.fontWeight]
             : Merriweather[textStyle.fontWeight] + fontStyle
         }`;
@@ -246,8 +246,8 @@ Index.defaultProps = {
   fieldColor: false,
   //numberOfLines
   numberOfLines: 10,
-  textAlign: 'left',
+  textAlign: "left",
   //custom style
   style: {},
-  children: '',
+  children: "",
 };
