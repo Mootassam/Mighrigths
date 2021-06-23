@@ -266,7 +266,13 @@ function Detail(props, navigation) {
       ) : null}
 
       {iframe ? (
-        <View style={[styles.blockView, { borderBottomColor: colors.border }]}>
+        <View
+          style={[
+            styles.blockView,
+            { borderBottomColor: colors.border },
+            { paddingBottom: 50 },
+          ]}
+        >
           <Text headline semibold style={{ paddingBottom: 15 }}>
             {t("video")}
           </Text>
@@ -277,7 +283,7 @@ function Detail(props, navigation) {
             fullscreen={false} // control whether the video should play in fullscreen or inline
             autoplay={false}
             loop // control whether the video should loop when ended
-            style={{ alignSelf: "stretch", height: 300 }}
+            style={{ alignSelf: "stretch", height: 250 }}
           />
         </View>
       ) : null}

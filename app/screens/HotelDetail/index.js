@@ -22,7 +22,7 @@ export default function HotelDetail({ route, navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60c51f8230277e001e03918c/informations/${infoId}`)
+      .get(`tenant/60cb644c838c09001e1b60ed/informations/${infoId}`)
       .then((json) => {
         setcategory([json.data]);
         for (const iterator of json.data.images) {

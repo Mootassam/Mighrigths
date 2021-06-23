@@ -12,7 +12,7 @@ export const BaseSetting = {
 
   // preProd
   apiUrl: "http://85.159.212.11:3000",
-  tenantId: "60c51f8230277e001e03918c",
+  tenantId: "60cb644c838c09001e1b60ed",
   languageSupport: ["en", "ar", "fr"],
   resourcesLanguage: {
     en: {

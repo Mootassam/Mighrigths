@@ -34,7 +34,7 @@ android {
         multiDexEnabled true
     }
 
-    signingConfigs {
+    signingConfigs {b
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
@@ -85,6 +85,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
     implementation project(':react-native-fast-image')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"
@@ -114,4 +115,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+// apply plugin: 'com.google.gms.google-services'
+
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

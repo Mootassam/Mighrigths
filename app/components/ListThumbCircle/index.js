@@ -1,11 +1,11 @@
-import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import {Image, Text} from '@components';
-import styles from './styles';
-import PropTypes from 'prop-types';
-import {useTheme} from '@config';
+import React from "react";
+import { View, TouchableOpacity } from "react-native";
+import { Image, Text, Icon } from "@components";
+import styles from "./styles";
+import PropTypes from "prop-types";
+import { useTheme, BaseColor } from "@config";
 export default function ListThumbCircle(props) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const {
     style,
     imageStyle,
@@ -13,17 +13,19 @@ export default function ListThumbCircle(props) {
     txtLeftTitle,
     txtContent,
     txtRight,
+    liked,
     onPress,
   } = props;
   return (
     <TouchableOpacity
       style={[
         styles.contain,
-        {borderBottomWidth: 1, borderBottomColor: colors.border},
+        { borderBottomWidth: 1, borderBottomColor: colors.border },
         style,
       ]}
       onPress={onPress}
-      activeOpacity={0.9}>
+      activeOpacity={0.9}
+    >
       {/* <Image source={image} style={[styles.thumb, imageStyle]} /> */}
       <View style={styles.content}>
         <View style={styles.left}>
@@ -42,10 +44,18 @@ export default function ListThumbCircle(props) {
             grayColor
             style={{
               paddingTop: 5,
-            }}>
+            }}
+          >
             {txtContent}
           </Text>
         </View>
+        <Icon
+          name="download"
+          solid={liked}
+          color={liked ? colors.primaryLight : BaseColor.whiteColor}
+          size={24}
+          style={styles.iconLike}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -58,15 +68,17 @@ ListThumbCircle.propTypes = {
   txtLeftTitle: PropTypes.string,
   txtContent: PropTypes.string,
   txtRight: PropTypes.string,
+  liked: PropTypes.bool,
   onPress: PropTypes.func,
 };
 
 ListThumbCircle.defaultProps = {
   style: {},
   imageStyle: {},
-  image: '',
-  txtLeftTitle: '',
-  txtContent: '',
-  txtRight: '',
+  image: "",
+  txtLeftTitle: "",
+  txtContent: "",
+  txtRight: "",
+  liked: true,
   onPress: () => {},
 };

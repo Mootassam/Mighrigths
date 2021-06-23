@@ -17,7 +17,7 @@ export default function News({ navigation }) {
   const onScroll = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60c51f8230277e001e03918c/informations`)
+      .get(`tenant/60cb644c838c09001e1b60ed/informations`)
       .then((json) => {
         setInformation(json.data.rows);
         setRefreshing(false);
@@ -39,7 +39,7 @@ export default function News({ navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60c51f8230277e001e03918c/informations?limit=${offset}`)
+      .get(`tenant/60cb644c838c09001e1b60ed/informations?limit=${offset}`)
       .then((json) => {
         setOffset(offset + 6);
         setInformation(json.data.rows);

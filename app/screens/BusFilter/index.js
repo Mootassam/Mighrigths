@@ -14,7 +14,6 @@ import {
   Icon,
   Text,
   Button,
-  EventCard,
   ListThumbCircle,
 } from "@components";
 import { styles } from "./styles";

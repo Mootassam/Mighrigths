@@ -78,26 +78,7 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
-		<string>Merriweather-Black.ttf</string>
-		<string>Merriweather-BlackItalic.ttf</string>
-		<string>Merriweather-Bold.ttf</string>
-		<string>Merriweather-BoldItalic.ttf</string>
-		<string>Merriweather-Italic.ttf</string>
-		<string>Merriweather-Light.ttf</string>
-		<string>Merriweather-LightItalic.ttf</string>
-		<string>Merriweather-Regular.ttf</string>
-		<string>Roboto-Black.ttf</string>
-		<string>Roboto-BlackItalic.ttf</string>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-BoldItalic.ttf</string>
-		<string>Roboto-Italic.ttf</string>
-		<string>Roboto-Light.ttf</string>
-		<string>Roboto-LightItalic.ttf</string>
-		<string>Roboto-Medium.ttf</string>
-		<string>Roboto-MediumItalic.ttf</string>
-		<string>Roboto-Regular.ttf</string>
-		<string>Roboto-Thin.ttf</string>
-		<string>Roboto-ThinItalic.ttf</string>
+		
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen</string>

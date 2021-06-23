@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  RefreshControl,
-  View,
-  Animated,
-  ActivityIndicator,
-} from "react-native";
+import { RefreshControl, View, Animated } from "react-native";
 import { BaseStyle, useTheme, authAxios } from "@config";
 import { Header, SafeAreaView, HotelItem } from "@components";
 import { useTranslation } from "react-i18next";
@@ -154,15 +149,15 @@ export default function News({ navigation }) {
 
   return (
     <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: "always" }}>
-      <Header   title={t("MIGRIGHTS")} />
+      <Header title={t("MIGRIGHTS")} />
       <View
         style={{
-      
           marginTop: 6,
           borderBottomColor: "lightgray",
           borderBottomWidth: 0.4,
         }}
       />
+
       {renderContent()}
     </SafeAreaView>
   );

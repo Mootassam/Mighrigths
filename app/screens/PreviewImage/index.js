@@ -25,7 +25,7 @@ export default function PreviewImage({ route, navigation }) {
   useEffect(() => {
     setLoading(true);
     authAxios
-      .get(`tenant/60c51f8230277e001e03918c/informations/${imageId}`)
+      .get(`tenant/60cb644c838c09001e1b60ed/informations/${imageId}`)
       .then((json) => {
         setImages(json.data.images);
 

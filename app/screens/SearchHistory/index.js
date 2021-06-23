@@ -40,7 +40,7 @@ export default function SearchHistory({ navigation }) {
 
     setLoading(true);
     authAxios
-      .get("/tenant/60c51f8230277e001e03918c/informations")
+      .get("/tenant/60cb644c838c09001e1b60ed/informations")
       .then((res) => {
         setFilteredDataSource(res.data.rows);
         setMasterDataSource(res.data.rows);

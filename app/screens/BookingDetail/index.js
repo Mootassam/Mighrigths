@@ -1,35 +1,54 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { TabView, TabBar } from 'react-native-tab-view';
-import { useTranslation } from 'react-i18next';
-import styles from './styles';
-import { Header, SafeAreaView, Icon, Text, ListThumbCircle, Tag } from '@components';
-import { ScrollView, View, FlatList, InteractionManager, Platform, Image } from 'react-native';
-import { BaseStyle, BaseColor, useTheme, BaseSetting, Images } from '@config';
-import { useSelector, useDispatch } from 'react-redux';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import VideoPlayer from 'react-native-video-player';
-import { FAB, Portal, Provider } from 'react-native-paper';
-import Moment from 'moment';
+import React, { useState, useEffect, useRef } from "react";
+import { TabView, TabBar } from "react-native-tab-view";
+import { useTranslation } from "react-i18next";
+import styles from "./styles";
+import {
+  Header,
+  SafeAreaView,
+  Icon,
+  Text,
+  ListThumbCircle,
+  Tag,
+} from "@components";
+import {
+  ScrollView,
+  View,
+  FlatList,
+  InteractionManager,
+  Platform,
+  Image,
+  TouchableOpacity,
+  PermissionsAndroid,
+} from "react-native";
+import { BaseStyle, BaseColor, useTheme, BaseSetting, Images } from "@config";
+import { useSelector, useDispatch } from "react-redux";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import VideoPlayer from "react-native-video-player";
+import { FAB, Portal, Provider } from "react-native-paper";
+import Moment from "moment";
+import RNFetchBlob from "rn-fetch-blob";
+import Snackbar from "react-native-snackbar";
+import AnimatedLoader from "react-native-animated-loader";
 
 export default function BookingDetail({ navigation }) {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const currentTestimony = useSelector(state => state.media.testimony_id);
+  const currentTestimony = useSelector((state) => state.media.testimony_id);
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'preview', title: t('detail') },
-    { key: 'media', title: t('attachment') },
-    { key: 'history', title: t('history') },
+    { key: "preview", title: t("detail") },
+    { key: "media", title: t("attachment") },
+    { key: "history", title: t("history") },
   ]);
 
   // When tab is activated, set what's index value
-  const handleIndexChange = index => {
+  const handleIndexChange = (index) => {
     setIndex(index);
   };
 
   // Customize UI tab bar
-  const renderTabBar = props => (
+  const renderTabBar = (props) => (
     <TabBar
       {...props}
       scrollEnabled
@@ -39,7 +58,7 @@ export default function BookingDetail({ navigation }) {
       inactiveColor={BaseColor.grayColor}
       activeColor={colors.text}
       renderLabel={({ route, focused, color }) => (
-        <View style={{ flex: 1, alignItems: 'center', width: 150 }}>
+        <View style={{ flex: 1, alignItems: "center", width: 150 }}>
           <Text headline semibold={focused} style={{ color }}>
             {route.title}
           </Text>
@@ -51,19 +70,19 @@ export default function BookingDetail({ navigation }) {
   // Render correct screen container when tab is activated
   const renderScene = ({ route, jumpTo }) => {
     switch (route.key) {
-      case 'preview':
+      case "preview":
         return <PreviewTab jumpTo={jumpTo} navigation={navigation} />;
-      case 'media':
+      case "media":
         return <MediaTab jumpTo={jumpTo} navigation={navigation} />;
-      case 'history':
+      case "history":
         return <HistoryTab jumpTo={jumpTo} navigation={navigation} />;
     }
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: 'always' }}>
+    <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: "always" }}>
       <Header
-        title={t('detail')}
+        title={t("detail")}
         renderLeft={() => {
           return (
             <Icon
@@ -101,17 +120,16 @@ function PreviewTab() {
   const { colors } = useTheme();
   const [language, setLanguage] = useState(i18n.language);
   const [renderMapView, setRenderMapView] = useState(false);
-  const testimony = useSelector(state => state.media.testimony_id);
-  const tags = useSelector(state => state.media.testimony_id.tags);
+  const testimony = useSelector((state) => state.media.testimony_id);
+  const tags = useSelector((state) => state.media.testimony_id.tags);
 
   if (testimony.position) {
     [position] = useState({
-      latitude: parseFloat(testimony.position.split(', ')[0]),
-      longitude: parseFloat(testimony.position.split(', ')[1]),
+      latitude: parseFloat(testimony.position.split(", ")[0]),
+      longitude: parseFloat(testimony.position.split(", ")[1]),
       latitudeDelta: 0.05,
       longitudeDelta: 0.004,
     });
-
   }
 
   useEffect(() => {
@@ -123,111 +141,86 @@ function PreviewTab() {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <ScrollView forceInset={{ top: 'always' }} contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView
+          forceInset={{ top: "always" }}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
           <View>
             <Text body1 semibold style={[styles.textView, { marginTop: 10 }]}>
-              {t('title')}
+              {t("title")}
             </Text>
-            <Text
-              style={[styles.textArea]}
-              textAlignVertical='top'
-            >
+            <Text style={[styles.textArea]} textAlignVertical="top">
               {testimony.title}
             </Text>
           </View>
-          {language === 'fr' ?
+          {language === "fr" ? (
             <View>
               <Text body1 semibold style={[styles.textView]}>
-                {t('category')}
+                {t("category")}
               </Text>
-              <Text
-                style={[styles.textArea]}
-                textAlignVertical='top'
-              >
+              <Text style={[styles.textArea]} textAlignVertical="top">
                 {testimony.category.titleFR}
               </Text>
-
             </View>
-            :
-            null
-          }
-          {language === 'en' ?
+          ) : null}
+          {language === "en" ? (
             <View>
               <Text body1 semibold style={[styles.textView]}>
-                {t('category')}
+                {t("category")}
               </Text>
 
-              <Text
-                style={[styles.textArea]}
-                textAlignVertical='top'
-              >
+              <Text style={[styles.textArea]} textAlignVertical="top">
                 {testimony.category.titleEN}
               </Text>
-
             </View>
-            :
-            null
-          }
-          {language === 'ar' ?
+          ) : null}
+          {language === "ar" ? (
             <View>
               <Text body1 semibold style={[styles.textView]}>
-                {t('category')}
+                {t("category")}
               </Text>
 
-              <Text
-                style={[styles.textArea]}
-                textAlignVertical='top'
-              >
+              <Text style={[styles.textArea]} textAlignVertical="top">
                 {testimony.category.titleAR}
               </Text>
-
             </View>
-            :
-            null
-          }
+          ) : null}
           <View>
             <Text body1 semibold style={styles.textView}>
-              {t('description')}
+              {t("description")}
             </Text>
             <Text
               style={[styles.textArea, { height: 100 }]}
-              textAlignVertical='top'
+              textAlignVertical="top"
             >
               {testimony.description}
             </Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 6 }}>
               <Text body1 semibold style={styles.textView}>
-                {t('contact_details')}
+                {t("contact_details")}
               </Text>
-              <Text
-                style={[styles.textArea]}
-                textAlignVertical='top'
-              >
+              <Text style={[styles.textArea]} textAlignVertical="top">
                 {testimony.contact}
               </Text>
             </View>
             <View style={{ flex: 6 }}>
               <Text body1 semibold style={styles.textView}>
-                {t('region')}
+                {t("region")}
               </Text>
-              <Text
-                style={[styles.textArea]}
-                textAlignVertical='top'
-              >
+              <Text style={[styles.textArea]} textAlignVertical="top">
                 {testimony.region}
               </Text>
             </View>
-
           </View>
-          {testimony.tags.length !== 0 ?
+          {testimony.tags.length !== 0 ? (
             <View style={{ flex: 1 }}>
               <Text body1 semibold style={styles.textView}>
-                {t('tags')}
+                {t("tags")}
               </Text>
               <View style={styles.contentList}>
-                {language === 'fr' ?
+                {language === "fr" ? (
                   <FlatList
                     contentContainerStyle={{ paddingLeft: 5, paddingRight: 20 }}
                     horizontal={true}
@@ -244,10 +237,8 @@ function PreviewTab() {
                       </Tag>
                     )}
                   />
-                  :
-                  null
-                }
-                {language === 'en' ?
+                ) : null}
+                {language === "en" ? (
                   <FlatList
                     contentContainerStyle={{ paddingLeft: 5, paddingRight: 20 }}
                     horizontal={true}
@@ -264,10 +255,8 @@ function PreviewTab() {
                       </Tag>
                     )}
                   />
-                  :
-                  null
-                }
-                {language === 'ar' ?
+                ) : null}
+                {language === "ar" ? (
                   <FlatList
                     contentContainerStyle={{ paddingLeft: 5, paddingRight: 20 }}
                     horizontal={true}
@@ -284,19 +273,14 @@ function PreviewTab() {
                       </Tag>
                     )}
                   />
-                  :
-                  null
-                }
-
+                ) : null}
               </View>
             </View>
-            :
-            null
-          }
-          {testimony.position ?
+          ) : null}
+          {testimony.position ? (
             <View style={{ flex: 1 }}>
               <Text body1 semibold style={styles.textView}>
-                {t('location')}
+                {t("location")}
               </Text>
               <View style={styles.mapContent}>
                 {renderMapView && (
@@ -304,7 +288,8 @@ function PreviewTab() {
                     provider={PROVIDER_GOOGLE}
                     style={styles.map}
                     region={this.position}
-                    onRegionChange={() => { }}>
+                    onRegionChange={() => {}}
+                  >
                     <Marker
                       coordinate={{
                         latitude: position.latitude,
@@ -315,10 +300,7 @@ function PreviewTab() {
                 )}
               </View>
             </View>
-            :
-            null
-          }
-
+          ) : null}
         </ScrollView>
       </View>
     </View>
@@ -333,16 +315,16 @@ function PreviewTab() {
  * @extends {Component}
  */
 function MediaTab() {
+  const SERVER_URL_TESTIMONY =
+    BaseSetting.apiUrl + "/api/tenant/" + BaseSetting.tenantId + "/testimony";
+  const testimony = useSelector((state) => state.media.testimony_id);
+  const images = useSelector((state) => state.media.images);
+  const video = useSelector((state) => state.media.video);
+  const files = useSelector((state) => state.media.files);
+  const audio = useSelector((state) => state.media.audio);
 
-  const SERVER_URL_TESTIMONY = BaseSetting.apiUrl + '/api/tenant/' + BaseSetting.tenantId + '/testimony';
-  const testimony = useSelector(state => state.media.testimony_id);
-  const images = useSelector(state => state.media.images);
-  const video = useSelector(state => state.media.video);
-  const files = useSelector(state => state.media.files);
-  const audio = useSelector(state => state.media.audio);
-
-  const currentUser = useSelector(state => state.media.user_id);
-  const token = useSelector(state => state.media.token);
+  const currentUser = useSelector((state) => state.media.user_id);
+  const token = useSelector((state) => state.media.token);
 
   const dispatch = useDispatch();
   const { colors } = useTheme();
@@ -350,22 +332,99 @@ function MediaTab() {
 
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
-  const [refreshing] = useState(false);
+  const checkPermission = async (filename) => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: "Storage Permission Required",
+          message: "Application needs access to your storage to download File",
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        // Start downloading
+        downloadFile(filename);
+      } else {
+        // If permission denied then show alert
+      }
+    } catch (err) {
+      setLoading2(false);
+    }
+  };
+
+  const downloadFile = (filename) => {
+    setLoading2(true);
+    // Get today's date to add the time suffix in filename
+    let date = new Date();
+    // File URL which we want to download
+    let FILE_URL = filename;
+    // Function to get extention of the file url
+    let file_ext = getFileExtention(FILE_URL);
+
+    file_ext = "." + file_ext[0];
+
+    // config: To get response by passing the downloading related options
+    // fs: Root directory path to download
+    const { config, fs } = RNFetchBlob;
+    let RootDir = fs.dirs.PictureDir;
+    let options = {
+      fileCache: true,
+      addAndroidDownloads: {
+        path:
+          RootDir +
+          "/file_" +
+          Math.floor(date.getTime() + date.getSeconds() / 2) +
+          file_ext,
+        description: "downloading file...",
+        notification: true,
+        // useDownloadManager works with Android only
+        useDownloadManager: true,
+      },
+    };
+    config(options)
+      .fetch("GET", FILE_URL)
+      .then((res) => {
+        // Alert after successful downloading
+        Snackbar.show({
+          text: `${t("Filesuccessful")}`,
+          duration: Snackbar.LENGTH_LONG,
+        }),
+          setLoading2(false);
+      });
+  };
+
+  const getFileExtention = (fileUrl) => {
+    // To get the file extension
+    return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <ScrollView forceInset={{ top: 'always' }} contentContainerStyle={{ flexGrow: 1 }}>
-
-          {testimony.images.length !== 0 ?
-
+        <ScrollView
+          forceInset={{ top: "always" }}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          {loading2 ? (
+            <AnimatedLoader
+              visible={true}
+              overlayColor="rgba(255,255,255,0.75)"
+              source={require("../../assets/images/8447-loader-animation.json")}
+              animationStyle={styles.lottie}
+              speed={1}
+            >
+              <Text>{t("loading")}</Text>
+            </AnimatedLoader>
+          ) : null}
+          {testimony.images.length !== 0 ? (
             <View style={styles.titleView}>
               <Text title3 semibold>
-                {t('image')}
+                {t("image")}
               </Text>
               <FlatList
-                columnWrapperStyle={{ alignSelf: 'center' }}
+                columnWrapperStyle={{ alignSelf: "center" }}
                 numColumns={2}
                 data={testimony.images}
                 extraData={refresh}
@@ -373,75 +432,106 @@ function MediaTab() {
                 renderItem={({ item, index }) => (
                   // <View style={styles.contentView}>
                   <Image
-                    source={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.privateUrl }}
+                    source={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.privateUrl,
+                    }}
                     style={styles.roundedImage}
                   />
                   // </View>
                 )}
               />
             </View>
+          ) : null}
 
-            :
-            null
-          }
-
-          {testimony.videos.length !== 0 ?
+          {testimony.videos.length !== 0 ? (
             <View style={styles.titleView}>
               <Text title3 semibold>
-                {t('video')}
+                {t("video")}
               </Text>
               <VideoPlayer
-                video={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + testimony.videos[0].privateUrl }}
-                thumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + testimony.videos[0].privateUrl }}
-                endThumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + testimony.videos[0].privateUrl }}
+                video={{
+                  uri:
+                    BaseSetting.apiUrl +
+                    "/api/file/download?privateUrl=" +
+                    testimony.videos[0].privateUrl,
+                }}
+                thumbnail={{
+                  uri:
+                    BaseSetting.apiUrl +
+                    "/api/file/download?privateUrl=" +
+                    testimony.videos[0].privateUrl,
+                }}
+                endThumbnail={{
+                  uri:
+                    BaseSetting.apiUrl +
+                    "/api/file/download?privateUrl=" +
+                    testimony.videos[0].privateUrl,
+                }}
               />
             </View>
-            :
-            null
-          }
-          {testimony.audio.length !== 0 ?
+          ) : null}
+          {testimony.audio.length !== 0 ? (
             <View style={styles.titleView}>
               <Text title3 semibold>
-                {t('audio')}
+                {t("audio")}
               </Text>
 
-              <View style={{
-                paddingHorizontal: 20,
-                paddingTop: 20,
-                paddingBottom: 10,
-
-              }}>
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  paddingTop: 20,
+                  paddingBottom: 10,
+                }}
+              >
                 <VideoPlayer
-                  video={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + testimony.audio[0].privateUrl }}
-                  thumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + testimony.audio[0].privateUrl }}
-                  endThumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + testimony.audio[0].privateUrl }}
+                  video={{
+                    uri:
+                      BaseSetting.apiUrl +
+                      "/api/file/download?privateUrl=" +
+                      testimony.audio[0].privateUrl,
+                  }}
+                  thumbnail={{
+                    uri:
+                      BaseSetting.apiUrl +
+                      "/api/file/download?privateUrl=" +
+                      testimony.audio[0].privateUrl,
+                  }}
+                  endThumbnail={{
+                    uri:
+                      BaseSetting.apiUrl +
+                      "/api/file/download?privateUrl=" +
+                      testimony.audio[0].privateUrl,
+                  }}
                 />
               </View>
             </View>
-            :
-            null
-          }
+          ) : null}
 
-          {testimony.documents.length !== 0 ?
+          {testimony.documents.length !== 0 ? (
             <View style={styles.titleView}>
               <Text title3 semibold>
-                {t('file')}
+                {t("file")}
               </Text>
               {testimony.documents.map((item, key) => (
                 <View key={key}>
                   <ListThumbCircle
                     txtContent={item.name}
+                    onPress={() => {
+                      checkPermission(
+                        BaseSetting.apiUrl +
+                          "/api/file/download?privateUrl=" +
+                          item.privateUrl
+                      );
+                    }}
                   />
                 </View>
               ))}
             </View>
-
-            :
-            null
-          }
-
+          ) : null}
         </ScrollView>
-
       </View>
     </View>
   );
@@ -455,11 +545,10 @@ function MediaTab() {
  * @extends {Component}
  */
 function HistoryTab({ navigation }) {
-
   const [state, setState] = React.useState({ open: false });
-  const closedTestimony = useSelector(state => state.media.testimony_id);
+  const closedTestimony = useSelector((state) => state.media.testimony_id);
   const onStateChange = ({ open }) => setState({ open });
-  const currentUser = useSelector(state => state.media.user_id);
+  const currentUser = useSelector((state) => state.media.user_id);
   const { open } = state;
 
   const { t } = useTranslation();
@@ -469,8 +558,75 @@ function HistoryTab({ navigation }) {
     android: 20,
   });
   const refFlatList = useRef(null);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
+  const [loading2, setLoading2] = useState(false);
+  const [refreshing] = useState(false);
 
+  const checkPermission = async (filename) => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: "Storage Permission Required",
+          message: "Application needs access to your storage to download File",
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        // Start downloading
+        downloadFile(filename);
+      } else {
+        // If permission denied then show alert
+      }
+    } catch (err) {
+      setLoading2(false);
+    }
+  };
+
+  const downloadFile = (filename) => {
+    setLoading2(true);
+    // Get today's date to add the time suffix in filename
+    let date = new Date();
+    // File URL which we want to download
+    let FILE_URL = filename;
+    // Function to get extention of the file url
+    let file_ext = getFileExtention(FILE_URL);
+
+    file_ext = "." + file_ext[0];
+
+    // config: To get response by passing the downloading related options
+    // fs: Root directory path to download
+    const { config, fs } = RNFetchBlob;
+    let RootDir = fs.dirs.PictureDir;
+    let options = {
+      fileCache: true,
+      addAndroidDownloads: {
+        path:
+          RootDir +
+          "/file_" +
+          Math.floor(date.getTime() + date.getSeconds() / 2) +
+          file_ext,
+        description: "downloading file...",
+        notification: true,
+        // useDownloadManager works with Android only
+        useDownloadManager: true,
+      },
+    };
+    config(options)
+      .fetch("GET", FILE_URL)
+      .then((res) => {
+        // Alert after successful downloading
+        Snackbar.show({
+          text: `${t("Filesuccessful")}`,
+          duration: Snackbar.LENGTH_LONG,
+        }),
+          setLoading2(false);
+      });
+  };
+
+  const getFileExtention = (fileUrl) => {
+    // To get the file extension
+    return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
+  };
   const renderItem = (item) => {
     if (item.createdBy !== currentUser._id) {
       return (
@@ -480,14 +636,15 @@ function HistoryTab({ navigation }) {
               style={[
                 styles.userContentMessage,
                 { backgroundColor: colors.primaryLight },
-              ]}>
+              ]}
+            >
               <Text body2 whiteColor>
                 {item.comment}
               </Text>
-              {item.images.length !== 0 ?
+              {item.images.length !== 0 ? (
                 <View style={styles.titleView}>
                   <Text title3 semibold>
-                    {t('image')}
+                    {t("image")}
                   </Text>
                   <FlatList
                     contentContainerStyle={{
@@ -501,97 +658,141 @@ function HistoryTab({ navigation }) {
                     keyExtractor={(item, index) => item.id}
                     renderItem={({ item, index }) => (
                       <Image
-                        source={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.privateUrl }}
+                        source={{
+                          uri:
+                            BaseSetting.apiUrl +
+                            "/api/file/download?privateUrl=" +
+                            item.privateUrl,
+                        }}
                         style={styles.roundedImage}
                       />
                     )}
                   />
                 </View>
-                :
-                null
-              }
-              {item.video.length !== 0 ?
+              ) : null}
+              {item.video.length !== 0 ? (
                 <View style={styles.titleView}>
                   <Text title3 semibold>
-                    {t('video')}
+                    {t("video")}
                   </Text>
                   <VideoPlayer
-                    video={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.video[0].privateUrl }}
-                    thumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.video[0].privateUrl }}
-                    endThumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.video[0].privateUrl }}
+                    video={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.video[0].privateUrl,
+                    }}
+                    thumbnail={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.video[0].privateUrl,
+                    }}
+                    endThumbnail={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.video[0].privateUrl,
+                    }}
                   />
                 </View>
-                :
-                null
-              }
-              {item.audio.length !== 0 ?
+              ) : null}
+              {item.audio.length !== 0 ? (
                 <View style={styles.titleView}>
                   <Text title3 semibold>
-                    {t('audio')}
+                    {t("audio")}
                   </Text>
                   <VideoPlayer
-                    video={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.audio[0].privateUrl }}
-                    thumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.audio[0].privateUrl }}
-                    endThumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.audio[0].privateUrl }}
+                    video={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.audio[0].privateUrl,
+                    }}
+                    thumbnail={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.audio[0].privateUrl,
+                    }}
+                    endThumbnail={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.audio[0].privateUrl,
+                    }}
                   />
                 </View>
-                :
-                null
-              }
-              {item.documents.length !== 0 ?
+              ) : null}
+              {item.documents.length !== 0 ? (
                 <View style={styles.titleView}>
                   <Text title3 semibold>
-                    {t('file')}
+                    {t("file")}
                   </Text>
                   {item.documents.map((item, key) => (
                     <View key={key}>
                       <ListThumbCircle
+                        style={[
+                          {
+                            backgroundColor: colors.background,
+                            borderRadius: 5,
+                            padding: 5,
+                          },
+                        ]}
                         txtContent={item.name}
+                        onPress={() => {
+                          checkPermission(
+                            BaseSetting.apiUrl +
+                              "/api/file/download?privateUrl=" +
+                              item.privateUrl
+                          );
+                        }}
                       />
                     </View>
                   ))}
                 </View>
-
-                :
-                null
-              }
+              ) : null}
             </View>
-
           </View>
           <View style={styles.userContentDate}>
-            {item.date ?
+            {item.date ? (
               <Text footnote numberOfLines={1}>
-                {Moment(item.date).format('YYYY-MM-DD')}
+                {Moment(item.date).format("YYYY-MM-DD")}
               </Text>
-              :
-              null
-            }
+            ) : null}
           </View>
         </View>
       );
-    }
-
-    else {
+    } else {
       return (
         <View style={styles.meContent}>
           <View style={styles.meContentDate}>
-            {item.date ?
+            {item.date ? (
               <Text footnote numberOfLines={1}>
-                {Moment(item.date).format('YYYY-MM-DD')}
+                {Moment(item.date).format("YYYY-MM-DD")}
               </Text>
-              :
-              null
-            }
+            ) : null}
           </View>
-          <View style={{ paddingLeft: 8, flex: 7, backgroundColor: colors.card, borderRadius: 8 }}>
+          <View
+            style={{
+              paddingLeft: 8,
+              flex: 7,
+              backgroundColor: colors.card,
+              borderRadius: 8,
+            }}
+          >
             <View
-              style={[styles.meContentMessage, { backgroundColor: colors.card }]}>
+              style={[
+                styles.meContentMessage,
+                { backgroundColor: colors.card },
+              ]}
+            >
               <Text body2>{item.comment}</Text>
 
-              {item.images.length !== 0 ?
+              {item.images.length !== 0 ? (
                 <View style={styles.titleView}>
                   <Text title3 semibold>
-                    {t('image')}
+                    {t("image")}
                   </Text>
                   <FlatList
                     contentContainerStyle={{
@@ -605,62 +806,95 @@ function HistoryTab({ navigation }) {
                     keyExtractor={(item, index) => item.id}
                     renderItem={({ item, index }) => (
                       <Image
-                        source={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.privateUrl }}
+                        source={{
+                          uri:
+                            BaseSetting.apiUrl +
+                            "/api/file/download?privateUrl=" +
+                            item.privateUrl,
+                        }}
                         style={styles.roundedImage}
                       />
                     )}
                   />
                 </View>
-                :
-                null
-              }
-              {item.video.length !== 0 ?
+              ) : null}
+              {item.video.length !== 0 ? (
                 <View style={styles.titleView}>
                   <Text title3 semibold>
-                    {t('video')}
+                    {t("video")}
                   </Text>
                   <VideoPlayer
-                    video={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.video[0].privateUrl }}
-                    thumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.video[0].privateUrl }}
-                    endThumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.video[0].privateUrl }}
+                    video={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.video[0].privateUrl,
+                    }}
+                    thumbnail={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.video[0].privateUrl,
+                    }}
+                    endThumbnail={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.video[0].privateUrl,
+                    }}
                   />
                 </View>
-                :
-                null
-              }
+              ) : null}
 
-              {item.audio.length !== 0 ?
+              {item.audio.length !== 0 ? (
                 <View style={styles.titleView}>
                   <Text title3 semibold>
-                    {t('audio')}
+                    {t("audio")}
                   </Text>
                   <VideoPlayer
-                    video={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.audio[0].privateUrl }}
-                    thumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.audio[0].privateUrl }}
-                    endThumbnail={{ uri: BaseSetting.apiUrl + '/api/file/download?privateUrl=' + item.audio[0].privateUrl }}
+                    video={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.audio[0].privateUrl,
+                    }}
+                    thumbnail={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.audio[0].privateUrl,
+                    }}
+                    endThumbnail={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.audio[0].privateUrl,
+                    }}
                   />
                 </View>
-                :
-                null
-              }
+              ) : null}
 
-              {item.documents.length !== 0 ?
+              {item.documents.length !== 0 ? (
                 <View style={styles.titleView}>
                   <Text title3 semibold>
-                    {t('file')}
+                    {t("file")}
                   </Text>
                   {item.documents.map((item, key) => (
                     <View key={key}>
                       <ListThumbCircle
                         txtContent={item.name}
+                        onPress={() => {
+                          checkPermission(
+                            BaseSetting.apiUrl +
+                              "/api/file/download?privateUrl=" +
+                              item.privateUrl
+                          );
+                        }}
                       />
                     </View>
                   ))}
                 </View>
-
-                :
-                null
-              }
+              ) : null}
             </View>
           </View>
         </View>
@@ -669,10 +903,22 @@ function HistoryTab({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: 'always' }}>
+    <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: "always" }}>
       <ScrollView
-        forceInset={{ top: 'always' }} contentContainerStyle={{ flexGrow: 1 }}
+        forceInset={{ top: "always" }}
+        contentContainerStyle={{ flexGrow: 1 }}
       >
+        {loading2 ? (
+          <AnimatedLoader
+            visible={true}
+            overlayColor="rgba(255,255,255,0.75)"
+            source={require("../../assets/images/8447-loader-animation.json")}
+            animationStyle={styles.lottie}
+            speed={1}
+          >
+            <Text>{t("loading")}</Text>
+          </AnimatedLoader>
+        ) : null}
         <View style={{ flex: 1 }}>
           <FlatList
             ref={refFlatList}
@@ -681,22 +927,19 @@ function HistoryTab({ navigation }) {
             renderItem={({ item }) => renderItem(item)}
           />
         </View>
-
       </ScrollView>
-      { closedTestimony.status === 'closed' ?
-        null
-        :
+      {closedTestimony.status === "closed" ? null : (
         <Provider style={styles.fab}>
           <Portal>
             <FAB.Group
               open={open}
-              icon={open ? 'close' : 'plus'}
+              icon={open ? "close" : "plus"}
               actions={[
                 {
-                  icon: 'chat-processing',
-                  label: t('sendActivity'),
+                  icon: "chat-processing",
+                  label: t("sendActivity"),
                   color: colors.primary,
-                  onPress: () => navigation.navigate('BusSelectSeat'),
+                  onPress: () => navigation.navigate("BusSelectSeat"),
                 },
               ]}
               onStateChange={onStateChange}
@@ -708,7 +951,7 @@ function HistoryTab({ navigation }) {
             />
           </Portal>
         </Provider>
-      }
+      )}
 
       {/* </View> */}
     </SafeAreaView>

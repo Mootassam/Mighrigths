@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { BaseColor } from '@config';
+import { StyleSheet } from "react-native";
+import { BaseColor } from "@config";
 import * as Utils from "@utils";
 
 export default StyleSheet.create({
@@ -13,7 +13,7 @@ export default StyleSheet.create({
     height: 1,
   },
   label: {
-    fontWeight: '400',
+    fontWeight: "400",
   },
   containProfileItem: {
     paddingLeft: 20,
@@ -21,19 +21,19 @@ export default StyleSheet.create({
   },
   logo: Platform.select({
     ios: {
-      resizeMode: 'contain',
+      resizeMode: "contain",
       height: normalize(190),
-      width: normalize(190)
+      width: normalize(190),
     },
     android: {
-      resizeMode: 'contain'
-    }
+      resizeMode: "contain",
+    },
   }),
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50
+    marginTop: 50,
   },
   modalView: {
     margin: 20,
@@ -44,17 +44,17 @@ export default StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    marginBottom: 10
+    marginBottom: 10,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
@@ -67,16 +67,16 @@ export default StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   main: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    alignContent: 'center',
+    flexDirection: "column",
+    alignItems: "center",
+    alignContent: "center",
     marginTop: 10,
     marginBottom: 20,
-    flexGrow: 1
+    flexGrow: 1,
   },
   button: {
     marginLeft: 5,
@@ -84,43 +84,43 @@ export default StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     borderRadius: 10, // adds the rounded corners
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
   },
   title: {
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
     marginBottom: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   container: {
-    width: '100%',
-    height: '100%',
-    position: 'relative',
+    width: "100%",
+    height: "100%",
+    position: "relative",
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     margin: 16,
     right: 0,
     bottom: 0,
-    color: BaseColor.orangeColor
+    color: BaseColor.orangeColor,
   },
   inputItem: {
-    padding: 10
+    padding: 10,
   },
   contentButtonBottom: {
     borderTopWidth: 1,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   blockImage: {
-    width: '100%',
-    height: '80%',
+    width: "100%",
+    height: "80%",
     borderRadius: 20,
-    margin: 5
+    margin: 5,
   },
   imagesGroup: {
     flex: 1,
@@ -132,7 +132,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: BaseColor.grayColor,
     margin: 20,
-    padding: 10
+    padding: 10,
   },
   titleView: {
     flex: 1,
@@ -150,30 +150,28 @@ export default StyleSheet.create({
     width: Utils.scaleWithPixel(200),
   },
   icon: {
-    alignSelf: 'flex-start',
-    marginRight: 30
+    alignSelf: "flex-start",
+    marginRight: 30,
   },
   iconGroup: {
-    flexDirection: 'row',
-    alignSelf: 'center',
+    flexDirection: "row",
+    alignSelf: "center",
   },
-  activeStyle: {
-
-  },
+  activeStyle: {},
   inactiveStyle: {
-    backgroundColor: 'grey',
-    alignItems: 'center',
+    backgroundColor: "grey",
+    alignItems: "center",
   },
   picker: {
     flex: 6,
     height: 50,
     margin: 5,
-    color: '#000000',
+    color: "#000000",
     backgroundColor: BaseColor.fieldColor,
     borderRadius: 8,
   },
   textView: {
-    marginLeft: 10
+    marginLeft: 10,
   },
   textArea: {
     margin: 10,
@@ -182,11 +180,11 @@ export default StyleSheet.create({
     backgroundColor: BaseColor.fieldColor,
   },
   mapContent: {
-    alignSelf: 'center',
+    alignSelf: "center",
     margin: 10,
     padding: 10,
     height: 180,
-    width: '95%',
+    width: "95%",
     marginVertical: 15,
   },
   map: {
@@ -195,21 +193,21 @@ export default StyleSheet.create({
   inputContent: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
   },
   sendIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginLeft: 8,
   },
   userContent: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   avatar: {
     width: 40,
@@ -229,21 +227,21 @@ export default StyleSheet.create({
   userContentDate: {
     // flex: 3, justifyContent: 'center'
     flex: 3,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     marginTop: 50,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
   meContent: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   meContentDate: {
     flex: 3,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     marginTop: 10,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
   meContentMessage: {
     marginTop: 8,
@@ -256,19 +254,19 @@ export default StyleSheet.create({
   contentList: {
     flexDirection: "row",
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   contentView: {
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
-    height: '100%',
+    height: "100%",
     borderRadius: 5,
     borderWidth: 1,
     borderColor: BaseColor.grayColor,
     margin: 20,
-    padding: 10
+    padding: 10,
   },
   roundedImage: {
     height: Utils.scaleWithPixel(300),
@@ -277,7 +275,10 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: BaseColor.grayColor,
     // height: 200,
-    margin: 10
+    margin: 10,
   },
-})
-
+  lottie: {
+    width: 80,
+    height: 80,
+  },
+});
