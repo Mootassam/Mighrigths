@@ -18,6 +18,8 @@ target 'FelixPro' do
 
   pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
 
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
   post_install do |installer|
     flipper_post_install(installer)
   end

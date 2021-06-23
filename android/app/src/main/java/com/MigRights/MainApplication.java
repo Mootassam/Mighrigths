@@ -1,4 +1,4 @@
-package com.felixpro;
+package com.migrights;
 
 import android.app.Application;
 import android.content.Context;
@@ -6,7 +6,7 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
-
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage ;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -54,7 +54,7 @@ public class MainApplication extends Application implements ReactApplication {
   private static void initializeFlipper(Context context, ReactInstanceManager reactInstanceManager) {
     if (BuildConfig.DEBUG) {
       try {
-        Class<?> aClass = Class.forName("com.felixpro.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.migrights.ReactNativeFlipper");
         aClass.getMethod("initializeFlipper", Context.class, ReactInstanceManager.class).invoke(null, context,
             reactInstanceManager);
       } catch (ClassNotFoundException e) {
