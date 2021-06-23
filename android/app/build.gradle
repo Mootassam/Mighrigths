@@ -85,7 +85,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    // implementation 'com.google.firebase:firebase-analytics:17.3.0'
     implementation project(':react-native-fast-image')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"

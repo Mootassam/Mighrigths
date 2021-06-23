@@ -16,6 +16,8 @@ target 'FelixPro' do
 
   pod 'RCTYouTube', :path => '../node_modules/react-native-youtube'
 
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
   post_install do |installer|
     flipper_post_install(installer)
   end
