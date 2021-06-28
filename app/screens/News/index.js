@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { RefreshControl, View, Animated } from "react-native";
+import { RefreshControl, View, Animated, Button, Platform } from "react-native";
 import { BaseStyle, useTheme, authAxios } from "@config";
 import { Header, SafeAreaView, HotelItem } from "@components";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import PushNotification, { Importance } from "react-native-push-notification";
 
 export default function News({ navigation }) {
   const { colors } = useTheme();
@@ -29,8 +30,47 @@ export default function News({ navigation }) {
   });
 
   useEffect(() => {
+    PushNotification.configure({
+      // (required) Called when a remote or local notification is opened or received
+      onNotification: function (notification) {
+        console.log("LOCAL NOTIFICATION ==>", notification);
+      },
+
+      popInitialNotification: true,
+      requestPermissions: Platform.OS === "ios",
+    });
     onRefresh();
   }, []);
+
+  PushNotification.createChannel(
+    {
+      channelId: "123", // (required)
+      channelName: "test", // (required)
+      channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+      playSound: false, // (optional) default: true
+      soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+      importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+      vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+    },
+    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  );
+
+  LocalNotification = () => {
+    PushNotification.localNotification({
+      autoCancel: true,
+      bigText:
+        "This is local notification demo in React Native app. Only shown, when expanded.",
+      subText: "Local Notification Demo",
+      title: "Local Notification Title",
+      message: "Expand me to see more",
+      vibrate: true,
+      vibration: 300,
+      playSound: true,
+      soundName: "default",
+      actions: '["Yes", "No"]',
+      channelId: "123",
+    });
+  };
 
   const ItemView = ({ item }) => {
     switch (language) {
@@ -157,6 +197,7 @@ export default function News({ navigation }) {
           borderBottomWidth: 0.4,
         }}
       />
+      <Button title="add" onPress={LocalNotification} />
 
       {renderContent()}
     </SafeAreaView>
