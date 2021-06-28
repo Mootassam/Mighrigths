@@ -35,11 +35,14 @@ export default function News({ navigation }) {
       onNotification: function (notification) {
         console.log("LOCAL NOTIFICATION ==>", notification);
       },
-
+      onRegistrationError: function (err) {
+        console.error(err.message, err);
+      },
       popInitialNotification: true,
       requestPermissions: Platform.OS === "ios",
     });
     onRefresh();
+    LocalNotification();
   }, []);
 
   PushNotification.createChannel(
@@ -197,7 +200,6 @@ export default function News({ navigation }) {
           borderBottomWidth: 0.4,
         }}
       />
-      <Button title="add" onPress={LocalNotification} />
 
       {renderContent()}
     </SafeAreaView>
