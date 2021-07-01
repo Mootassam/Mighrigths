@@ -5,6 +5,7 @@ import { Header, SafeAreaView, HotelItem } from "@components";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import PushNotification, { Importance } from "react-native-push-notification";
+import io from "socket.io-client";
 
 export default function News({ navigation }) {
   const { colors } = useTheme();
@@ -15,6 +16,7 @@ export default function News({ navigation }) {
   const language = useSelector((state) => state.application.language);
 
   const onRefresh = useCallback(async () => {
+    var socket;
     setRefreshing(true);
 
     await authAxios
@@ -30,10 +32,19 @@ export default function News({ navigation }) {
   });
 
   useEffect(() => {
+    // this.socket = io(`http://172.16.224.150:8080`);
     PushNotification.configure({
       // (required) Called when a remote or local notification is opened or received
+
       onNotification: function (notification) {
-        console.log("LOCAL NOTIFICATION ==>", notification);
+        console.log("NOTIFICATION:", notification);
+
+        if (notification.foreground) {
+          PushNotification.localNotification({
+            title: notification.title,
+            message: notification.message,
+          });
+        }
       },
       onRegistrationError: function (err) {
         console.error(err.message, err);
@@ -42,21 +53,11 @@ export default function News({ navigation }) {
       requestPermissions: Platform.OS === "ios",
     });
     onRefresh();
-    LocalNotification();
+    // this.socket.on("refreshactivity", () => {
+    //   onRefresh();
+    //   LocalNotification();
+    // });
   }, []);
-
-  PushNotification.createChannel(
-    {
-      channelId: "123", // (required)
-      channelName: "test", // (required)
-      channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-      playSound: false, // (optional) default: true
-      soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
-      importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-      vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
-    },
-    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-  );
 
   LocalNotification = () => {
     PushNotification.localNotification({
@@ -69,11 +70,22 @@ export default function News({ navigation }) {
       vibrate: true,
       vibration: 300,
       playSound: true,
+      ignoreInForeground: false,
+      timeoutAfter: null,
       soundName: "default",
       actions: '["Yes", "No"]',
       channelId: "123",
     });
   };
+
+  PushNotification.createChannel({
+    channelId: "123", // (required)
+    channelName: "test", // (required)
+    channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+    playSound: false, // (optional) default: true
+    soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+    importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+  });
 
   const ItemView = ({ item }) => {
     switch (language) {

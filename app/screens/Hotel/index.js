@@ -43,7 +43,7 @@ export default function Hotel({ route, navigation }) {
 
     authAxios
       .get(
-        `tenant/60cb644c838c09001e1b60ed/informations?filter[category]=${infoId}&limit=${offset}`
+        `tenant/60c23344ec1ee231dd3178c0/informations?filter[category]=${infoId}&limit=${offset}`
       )
 
       .then((json) => {

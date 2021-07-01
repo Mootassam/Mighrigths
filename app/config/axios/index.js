@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 export const authAxios = Axios.create({
-  baseURL: `http://85.159.212.11:3000/api`,
+  baseURL: `http://172.16.224.150:8080/api`,
   timeout: 1800,
   headers: {
     "Content-Type": "application/json",

@@ -31,7 +31,7 @@ import AnimatedLoader from "react-native-animated-loader";
 export default function Messenger({ navigation }) {
   var socket;
   useEffect(() => {
-    this.socket = io(`http://85.159.212.11:3000`);
+    this.socket = io(`http://172.16.224.150:8080`);
   }, []);
   const SERVER_URL_TESTIMONY = "/tenant/" + BaseSetting.tenantId + "/testimony";
 

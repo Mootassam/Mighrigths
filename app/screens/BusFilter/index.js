@@ -51,7 +51,7 @@ export default function BusFilter({ navigation }) {
 
   var socket;
   useEffect(() => {
-    this.socket = io(`http://85.159.212.11:3000`);
+    this.socket = io(`http://172.16.224.150:8080`);
   }, []);
 
   useEffect(() => {

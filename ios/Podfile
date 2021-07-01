@@ -16,6 +16,8 @@ target 'FelixPro' do
 
   pod 'RCTYouTube', :path => '../node_modules/react-native-youtube'
 
+  pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+
   pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
 
   pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
