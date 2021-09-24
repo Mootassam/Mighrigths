@@ -1,24 +1,38 @@
-import React, { useState } from 'react';
-import { View, KeyboardAvoidingView, Platform, ScrollView, I18nManager, TouchableOpacity } from 'react-native';
-import { BaseStyle, useTheme, BaseSetting, BaseColor } from '@config';
-import { Header, SafeAreaView, Icon, Button, TextInput, Text } from '@components';
+import React, { useState } from "react";
+import {
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  I18nManager,
+  TouchableOpacity,
+} from "react-native";
+import { BaseStyle, useTheme, BaseSetting, BaseColor } from "@config";
+import {
+  Header,
+  SafeAreaView,
+  Icon,
+  Button,
+  TextInput,
+  Text,
+} from "@components";
 
-import Modal from 'react-native-modal';
+import Modal from "react-native-modal";
 
-import DatePicker from 'react-native-date-picker'
+import DatePicker from "react-native-date-picker";
 
-import { Picker } from '@react-native-community/picker';
-import { Country } from '@data';
+import { Picker } from "@react-native-community/picker";
+import { Country } from "@data";
 
-import styles from './styles';
-import { useTranslation } from 'react-i18next';
+import styles from "./styles";
+import { useTranslation } from "react-i18next";
 
-import Snackbar from 'react-native-snackbar';
-import Axios from 'axios';
+import Snackbar from "react-native-snackbar";
+import Axios from "axios";
 import AnimatedLoader from "react-native-animated-loader";
-import { useSelector, useDispatch } from 'react-redux';
-import { MediaActions } from '@actions';
-import Moment from 'moment';
+import { useSelector, useDispatch } from "react-redux";
+import { MediaActions } from "@actions";
+import Moment from "moment";
 export default function SignUp({ navigation }) {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
@@ -28,15 +42,15 @@ export default function SignUp({ navigation }) {
     android: 20,
   });
 
-  const [fullName, setFullName] = useState('');
-  const [birthDate, setBirthDate] = useState(new Date())
-  const [country, setCountry] = useState('');
-  const [phone, setPhone] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [birthDate, setBirthDate] = useState(new Date());
+  const [country, setCountry] = useState("");
+  const [phone, setPhone] = useState("");
 
-  const [confirm_password, setConfirmPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [token, setToken] = useState('');
-  const [password, setPassword] = useState('');
+  const [confirm_password, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [accepted, setAccepted] = useState(false);
   const [success, setSuccess] = useState({
@@ -49,46 +63,52 @@ export default function SignUp({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [sendingTestimony, setSendingTestimony] = useState(false);
-  const SERVER_URL = '/auth/sign-up-mobile';
-  const SERVER_URL_ME = '/auth/me';
+  const SERVER_URL = "/auth/sign-up-mobile";
+  const SERVER_URL_ME = "/auth/me";
 
   const authAxios = Axios.create({
-    baseURL: BaseSetting.apiUrl + '/api',
-    timeout: 1800
+    baseURL: BaseSetting.apiUrl + "/api",
+    timeout: 1800,
   });
 
-  authAxios.interceptors.response.use((response) => {
-    return response;
-  }, function (error) {
-
-    return Promise.reject(error.response);
-  });
+  authAxios.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    function (error) {
+      return Promise.reject(error.response);
+    }
+  );
 
   const fetchMe = async (token) => {
     try {
-      await authAxios.get(SERVER_URL_ME, {
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": `Bearer ${token}`,
-          'Accept-Language': language === 'fr' ? 'es' : language
-        },
-      }).then((res) => {
-        dispatch(MediaActions.onCurrentUser(res.data));
-      })
-    }
-    catch (error) {
-      setLoading(false)
+      await authAxios
+        .get(SERVER_URL_ME, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            "Accept-Language": language === "fr" ? "es" : language,
+          },
+        })
+        .then((res) => {
+          dispatch(
+            MediaActions.onCurrentUser(res.data, res.data.tenants[0].tenant._id)
+          );
+        });
+    } catch (error) {
+      setLoading(false);
       Snackbar.show({
         text: error.data,
         duration: Snackbar.LENGTH_LONG,
         action: {
-          text: t('tryAgain'),
-          textColor: 'green',
-          onPress: () => { navigation.goBack() },
+          text: t("tryAgain"),
+          textColor: "green",
+          onPress: () => {
+            navigation.goBack();
+          },
         },
-      })
+      });
     }
-
   };
 
   /**
@@ -97,64 +117,71 @@ export default function SignUp({ navigation }) {
    */
   const onSignUp = async () => {
     setLoading(true);
-    if (confirm_password == '' || email == '' || password == '' || confirm_password !== password) {
+    if (
+      confirm_password == "" ||
+      email == "" ||
+      password == "" ||
+      confirm_password !== password
+    ) {
       setSuccess({
         ...success,
-        email: email != '' ? true : false,
-        password: password != '' ? true : false,
-        confirm_password: confirm_password != '' ? true : false,
+        email: email != "" ? true : false,
+        password: password != "" ? true : false,
+        confirm_password: confirm_password != "" ? true : false,
         validate_pass: confirm_password === password ? true : false,
       });
       Snackbar.show({
-        text: t('unvalidPwd'),
+        text: t("unvalidPwd"),
         duration: Snackbar.LENGTH_LONG,
       });
     } else {
-
       const data = {
-        "email": email,
-        "password": password,
-        "fullName": fullName,
-        "phoneNumber": phone,
-        "birthDate": birthDate,
-        "nationality": country
-      }
+        email: email,
+        password: password,
+        fullName: fullName,
+        phoneNumber: phone,
+        birthDate: birthDate,
+        nationality: country,
+      };
       try {
-        await authAxios.post(SERVER_URL, data, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept-Language': language === 'fr' ? 'es' : language
-          },
-        }).then((res) => {
-          fetchMe(res.data),
-            setSendingTestimony(false),
-            dispatch(MediaActions.onAddToken(res.data)),
-            navigation.goBack()
-        })
-      }
-      catch (error) {
-        setLoading(false)
+        await authAxios
+          .post(SERVER_URL, data, {
+            headers: {
+              "Content-Type": "application/json",
+              "Accept-Language": language === "fr" ? "es" : language,
+            },
+          })
+          .then((res) => {
+            fetchMe(res.data),
+              setSendingTestimony(false),
+              dispatch(MediaActions.onAddToken(res.data)),
+              navigation.goBack();
+          });
+      } catch (error) {
+        setLoading(false);
         Snackbar.show({
           text: error.data,
           duration: Snackbar.LENGTH_LONG,
           action: {
-            text: t('tryAgain'),
-            textColor: 'green',
-            onPress: () => { navigation.goBack() },
+            text: t("tryAgain"),
+            textColor: "green",
+            onPress: () => {
+              navigation.goBack();
+            },
           },
-        })
+        });
       }
     }
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: 'always' }}>
+    <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: "always" }}>
       <Header
-        title={t('sign_up')}
+        title={t("sign_up")}
         renderLeft={() => {
           return (
             <Icon
-              name="arrow-left"
+              name='arrow-left'
               size={20}
               color={colors.primary}
               enableRTL={true}
@@ -167,12 +194,12 @@ export default function SignUp({ navigation }) {
       />
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20 }}>
         <Text headline semibold style={{ marginTop: 20 }}>
-          {t('personalDetails')}
+          {t("personalDetails")}
         </Text>
         <TextInput
           style={{ marginTop: 10 }}
           onChangeText={(text) => setFullName(text)}
-          placeholder={t('name')}
+          placeholder={t("name")}
           success={success.fullName}
           value={fullName}
         />
@@ -181,47 +208,46 @@ export default function SignUp({ navigation }) {
           <Picker
             style={styles.picker}
             selectedValue={country}
-            onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}
-          >
-            <Picker.Item label={t('nationality')} value="" />
-            {Country.map(count => (
+            onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
+            <Picker.Item label={t("nationality")} value='' />
+            {Country.map((count) => (
               <Picker.Item label={t(count)} value={count} />
             ))}
-
           </Picker>
         </View>
 
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
           <View style={{ flex: 7.5 }}>
             <TextInput
               style={{ height: 60 }}
               onChangeText={(text) => setPhone(text)}
-              keyboardType="numeric"
-              placeholder={t('phone_number')}
+              keyboardType='numeric'
+              placeholder={t("phone_number")}
               value={phone}
             />
           </View>
 
-          <View
-            style={[styles.inputItem]}
-          >
+          <View style={[styles.inputItem]}>
             <Modal
               isVisible={modalVisible}
-              backdropColor="rgba(0, 0, 0, 0.5)"
+              backdropColor='rgba(0, 0, 0, 0.5)'
               backdropOpacity={1}
-              animationIn="fadeIn"
+              animationIn='fadeIn'
               animationInTiming={600}
               animationOutTiming={600}
               backdropTransitionInTiming={600}
               backdropTransitionOutTiming={600}>
-              <View style={[styles.contentCalendar, { backgroundColor: colors.card }]}>
-
+              <View
+                style={[
+                  styles.contentCalendar,
+                  { backgroundColor: colors.card },
+                ]}>
                 <DatePicker
                   style={{ padding: 5 }}
                   locale={language}
                   date={birthDate}
                   onDateChange={setBirthDate}
-                  mode="date"
+                  mode='date'
                 />
                 <View style={styles.contentActionCalendar}>
                   <TouchableOpacity
@@ -229,7 +255,7 @@ export default function SignUp({ navigation }) {
                       setModalVisible(false);
                       // onCancel();
                     }}>
-                    <Text body1>{t('cancel')}</Text>
+                    <Text body1>{t("cancel")}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
@@ -237,7 +263,7 @@ export default function SignUp({ navigation }) {
                       // onChange();
                     }}>
                     <Text body1 primaryColor>
-                      {t('confirm')}
+                      {t("confirm")}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -248,31 +274,31 @@ export default function SignUp({ navigation }) {
               style={styles.itemPick}
               onPress={() => setModalVisible(true)}>
               <Text caption1 light style={{ marginBottom: 5 }}>
-                {t('birthDate')}
+                {t("birthDate")}
               </Text>
               <Text headline semibold numberOfLines={1}>
-                {Moment(birthDate).format('YYYY/MM/DD')}
+                {Moment(birthDate).format("YYYY/MM/DD")}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
         <Text headline semibold style={{ marginTop: 20 }}>
-          {t('connectionDetails')}
+          {t("connectionDetails")}
         </Text>
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
           <View style={{ flex: 3 }}>
             <TextInput
               style={{ marginTop: 10 }}
               onChangeText={(text) => setEmail(text)}
-              placeholder={t('email')}
-              keyboardType="email-address"
+              placeholder={t("email")}
+              keyboardType='email-address'
               success={success.email}
               value={email}
             />
             <TextInput
               style={{ marginTop: 10 }}
               onChangeText={(text) => setPassword(text)}
-              placeholder={t('input_password')}
+              placeholder={t("input_password")}
               secureTextEntry={true}
               success={success.password}
               value={password}
@@ -280,38 +306,34 @@ export default function SignUp({ navigation }) {
             <TextInput
               style={{ marginTop: 10 }}
               onChangeText={(text) => setConfirmPassword(text)}
-              placeholder={t('password_confirm')}
+              placeholder={t("password_confirm")}
               secureTextEntry={true}
               success={success.confirm_password}
               value={confirm_password}
             />
           </View>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
-          <View
-            style={[styles.inputItem]}
-          >
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
+          <View style={[styles.inputItem]}>
             <Modal
               isVisible={modal2Visible}
-              backdropColor="rgba(0, 0, 0, 0.5)"
+              backdropColor='rgba(0, 0, 0, 0.5)'
               backdropOpacity={1}
-              animationIn="fadeIn"
+              animationIn='fadeIn'
               animationInTiming={600}
               animationOutTiming={600}
               backdropTransitionInTiming={600}
               backdropTransitionOutTiming={600}>
-              <View style={[styles.contentCalendar, { backgroundColor: colors.card, padding: 20 }]}>
-                <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec cursus condimentum dapibus.
-                Sed pretium nunc et blandit cursus. Etiam nec dui nunc. Mauris non nisl eros.
-                Nullam rutrum dapibus scelerisque.
-                Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
-                Sed at sapien nec mi venenatis lobortis vitae aliquam leo.
-                Curabitur interdum felis orci, et blandit sapien condimentum ac.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Integer tortor arcu, ultricies at ullamcorper vitae, bibendum convallis odio.
-                Sed rutrum, tellus a fringilla venenatis, purus turpis tristique urna, nec accumsan arcu augue quis diam.
-                Aenean et mattis turpis.
-            </Text>
+              <View
+                style={[
+                  styles.contentCalendar,
+                  { backgroundColor: colors.card, padding: 20 },
+                ]}>
+                <ScrollView style={{ flex: 1, height: "80%" }}>
+                  <Text semibold subhead numberOfLines={50}>
+                    {t("terms_paragraph")}
+                  </Text>
+                </ScrollView>
 
                 <View style={styles.contentActionCalendar}>
                   <TouchableOpacity
@@ -319,51 +341,61 @@ export default function SignUp({ navigation }) {
                       setModal2Visible(false);
                       // onCancel();
                     }}>
-                    <Text body1>{t('cancel')}</Text>
+                    <Text body1>{t("cancel")}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
-                      setAccepted(true)
+                      setAccepted(true);
                       setModal2Visible(false);
                       // onChange();
                     }}>
                     <Text body1 primaryColor>
-                      {t('accept')}
+                      {t("accept")}
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </Modal>
             <TouchableOpacity
-
-              style={{ margin: 10, flex: 1, color: colors.primary, alignItems: 'flex-end', }}
+              style={{
+                margin: 10,
+                flex: 1,
+                color: colors.primary,
+                alignItems: "flex-end",
+              }}
               onPress={() => setModal2Visible(true)}>
               <Text body1 primaryColor>
-                {t('terms')}
+                {t("terms")}
               </Text>
             </TouchableOpacity>
-
           </View>
         </View>
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
           <Button
             full
             style={{ margin: 10, flex: 4 }}
             onPress={() => {
               navigation.goBack();
-            }}
-          >
-            {t('cancel')}
+            }}>
+            {t("cancel")}
           </Button>
           <Button
             full
             loading={loading}
             onPress={() => onSignUp()}
-            disabled={!Boolean(fullName && email && country && phone && birthDate && accepted)}
-            style={!Boolean(fullName && email && country && phone && birthDate && accepted) ?
-              styles.inactiveStyle : styles.activeStyle}
-          >
-            {t('confirm')}
+            disabled={
+              !Boolean(
+                fullName && email && country && phone && birthDate && accepted
+              )
+            }
+            style={
+              !Boolean(
+                fullName && email && country && phone && birthDate && accepted
+              )
+                ? styles.inactiveStyle
+                : styles.activeStyle
+            }>
+            {t("confirm")}
           </Button>
         </View>
       </ScrollView>

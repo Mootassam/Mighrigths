@@ -21,11 +21,10 @@ import {
 } from "react-native";
 import { BaseStyle, BaseColor, useTheme, BaseSetting, Images } from "@config";
 import { useSelector, useDispatch } from "react-redux";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import { Title, FAB, Portal, Provider } from "react-native-paper";
 import Snackbar from "react-native-snackbar";
 import RNFetchBlob from "rn-fetch-blob";
 import AnimatedLoader from "react-native-animated-loader";
+import VideoPlayer from "react-native-video-player";
 
 export default function BusSearch({ navigation }) {
   const { colors } = useTheme();
@@ -79,7 +78,7 @@ export default function BusSearch({ navigation }) {
         renderLeft={() => {
           return (
             <Icon
-              name="arrow-left"
+              name='arrow-left'
               size={20}
               color={colors.primary}
               enableRTL={true}
@@ -119,36 +118,43 @@ function PreviewTab() {
       <View style={{ flex: 1 }}>
         <ScrollView
           forceInset={{ top: "always" }}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          contentContainerStyle={{ flexGrow: 1 }}>
           <View style={{ flex: 1 }}>
             <Text body1 semibold style={[styles.textView, { marginTop: 10 }]}>
               {t("category")}
             </Text>
             {language === "fr" ? (
-              <Text style={[styles.textArea]} textAlignVertical="top">
+              <Text style={[styles.textArea]} textAlignVertical='top'>
                 {testimony.category.titleFR}
               </Text>
             ) : null}
             {language === "en" ? (
-              <Text style={[styles.textArea]} textAlignVertical="top">
+              <Text style={[styles.textArea]} textAlignVertical='top'>
                 {testimony.category.titleEN}
               </Text>
             ) : null}
             {language === "ar" ? (
-              <Text style={[styles.textArea]} textAlignVertical="top">
+              <Text style={[styles.textArea]} textAlignVertical='top'>
                 {testimony.category.titleAR}
               </Text>
             ) : null}
-
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ flex: 6 }}>
+                <Text body1 semibold style={styles.textView}>
+                  {t("region")}
+                </Text>
+                <Text style={[styles.textArea]} textAlignVertical='top'>
+                  {testimony.region}
+                </Text>
+              </View>
+            </View>
             <View>
               <Text body1 semibold style={styles.textView}>
                 {t("description")}
               </Text>
               <Text
                 style={[styles.textArea, { height: 100 }]}
-                textAlignVertical="top"
-              >
+                textAlignVertical='top'>
                 {testimony.description}
               </Text>
             </View>
@@ -167,16 +173,24 @@ function PreviewTab() {
  * @extends {Component}
  */
 function MediaTab() {
+  const tenantId = useSelector((state) => state.media.tenant_id);
   const SERVER_URL_TESTIMONY =
-    BaseSetting.apiUrl + "/api/tenant/" + BaseSetting.tenantId + "/testimony";
+    BaseSetting.apiUrl + "/api/tenant/" + tenantId + "/testimony";
   const testimony = useSelector((state) => state.media.testimony_id);
-
+  const images = useSelector((state) => state.media.images);
+  const video = useSelector((state) => state.media.video);
   const files = useSelector((state) => state.media.files);
+  const audio = useSelector((state) => state.media.audio);
+
+  const currentUser = useSelector((state) => state.media.user_id);
+  const token = useSelector((state) => state.media.token);
 
   const dispatch = useDispatch();
   const { colors } = useTheme();
   const { t } = useTranslation();
 
+  const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
   const checkPermission = async (filename) => {
@@ -250,19 +264,108 @@ function MediaTab() {
       <View style={{ flex: 1 }}>
         <ScrollView
           forceInset={{ top: "always" }}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          contentContainerStyle={{ flexGrow: 1 }}>
           {loading2 ? (
             <AnimatedLoader
               visible={true}
-              overlayColor="rgba(255,255,255,0.75)"
+              overlayColor='rgba(255,255,255,0.75)'
               source={require("../../assets/images/8447-loader-animation.json")}
               animationStyle={styles.lottie}
-              speed={1}
-            >
+              speed={1}>
               <Text>{t("loading")}</Text>
             </AnimatedLoader>
           ) : null}
+          {testimony.images.length !== 0 ? (
+            <View style={styles.titleView}>
+              <Text title3 semibold>
+                {t("image")}
+              </Text>
+              <FlatList
+                columnWrapperStyle={{ alignSelf: "center" }}
+                numColumns={2}
+                data={testimony.images}
+                extraData={refresh}
+                keyExtractor={(item, index) => item.id}
+                renderItem={({ item, index }) => (
+                  // <View style={styles.contentView}>
+                  <Image
+                    source={{
+                      uri:
+                        BaseSetting.apiUrl +
+                        "/api/file/download?privateUrl=" +
+                        item.privateUrl,
+                    }}
+                    style={styles.roundedImage}
+                  />
+                  // </View>
+                )}
+              />
+            </View>
+          ) : null}
+
+          {testimony.videos.length !== 0 ? (
+            <View style={styles.titleView}>
+              <Text title3 semibold>
+                {t("video")}
+              </Text>
+              <VideoPlayer
+                video={{
+                  uri:
+                    BaseSetting.apiUrl +
+                    "/api/file/download?privateUrl=" +
+                    testimony.videos[0].privateUrl,
+                }}
+                thumbnail={{
+                  uri:
+                    BaseSetting.apiUrl +
+                    "/api/file/download?privateUrl=" +
+                    testimony.videos[0].privateUrl,
+                }}
+                endThumbnail={{
+                  uri:
+                    BaseSetting.apiUrl +
+                    "/api/file/download?privateUrl=" +
+                    testimony.videos[0].privateUrl,
+                }}
+              />
+            </View>
+          ) : null}
+          {testimony.audio.length !== 0 ? (
+            <View style={styles.titleView}>
+              <Text title3 semibold>
+                {t("audio")}
+              </Text>
+
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  paddingTop: 20,
+                  paddingBottom: 10,
+                }}>
+                <VideoPlayer
+                  video={{
+                    uri:
+                      BaseSetting.apiUrl +
+                      "/api/file/download?privateUrl=" +
+                      testimony.audio[0].privateUrl,
+                  }}
+                  thumbnail={{
+                    uri:
+                      BaseSetting.apiUrl +
+                      "/api/file/download?privateUrl=" +
+                      testimony.audio[0].privateUrl,
+                  }}
+                  endThumbnail={{
+                    uri:
+                      BaseSetting.apiUrl +
+                      "/api/file/download?privateUrl=" +
+                      testimony.audio[0].privateUrl,
+                  }}
+                />
+              </View>
+            </View>
+          ) : null}
+
           {testimony.documents.length !== 0 ? (
             <View style={styles.titleView}>
               <Text title3 semibold>

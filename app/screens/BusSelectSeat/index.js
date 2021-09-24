@@ -1,32 +1,47 @@
-import React, { useState, Component } from 'react';
-import { BaseStyle, BaseColor, useTheme, BaseSetting, Images } from '@config';
-import { useTranslation } from 'react-i18next';
+import React, { useState, Component } from "react";
+import { BaseStyle, BaseColor, useTheme, BaseSetting, Images } from "@config";
+import { useTranslation } from "react-i18next";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { MediaActions } from '@actions';
-import Modal from 'react-native-modal';
-import { ScrollView, View, FlatList, I18nManager, TouchableOpacity } from 'react-native';
-import DatePicker from 'react-native-date-picker'
-import { Header, SafeAreaView, TextInput, Icon, Text, Button, EventCard, ListThumbCircle } from '@components';
-import { styles } from './styles';
-import VideoPlayer from 'react-native-video-player';
-import { Title, FAB, Portal, Provider } from 'react-native-paper';
-import Axios from 'axios';
-import Snackbar from 'react-native-snackbar';
+import { useSelector, useDispatch } from "react-redux";
+import { MediaActions } from "@actions";
+import Modal from "react-native-modal";
+import {
+  ScrollView,
+  View,
+  FlatList,
+  I18nManager,
+  TouchableOpacity,
+} from "react-native";
+import DatePicker from "react-native-date-picker";
+import {
+  Header,
+  SafeAreaView,
+  TextInput,
+  Icon,
+  Text,
+  Button,
+  EventCard,
+  ListThumbCircle,
+} from "@components";
+import { styles } from "./styles";
+import VideoPlayer from "react-native-video-player";
+import { Title, FAB, Portal, Provider } from "react-native-paper";
+import Axios from "axios";
+import Snackbar from "react-native-snackbar";
 import AnimatedLoader from "react-native-animated-loader";
-import Moment from 'moment';
+import Moment from "moment";
 
 export default function BusSelectSeat({ navigation }) {
+  const tenantId = useSelector((state) => state.media.tenant_id);
+  const SERVER_URL_ACTIVITY = "/tenant/" + tenantId + "/activity";
 
-  const SERVER_URL_ACTIVITY = '/tenant/' + BaseSetting.tenantId + '/activity';
+  const images = useSelector((state) => state.media.images);
+  const video = useSelector((state) => state.media.video);
+  const files = useSelector((state) => state.media.files);
+  const audio = useSelector((state) => state.media.audio);
 
-  const images = useSelector(state => state.media.images);
-  const video = useSelector(state => state.media.video);
-  const files = useSelector(state => state.media.files);
-  const audio = useSelector(state => state.media.audio);
-
-  const currentTestimony = useSelector(state => state.media.testimony_id);
-  const token = useSelector(state => state.media.token);
+  const currentTestimony = useSelector((state) => state.media.testimony_id);
+  const token = useSelector((state) => state.media.token);
   const [sendingTestimony, setSendingTestimony] = useState(false);
   const dispatch = useDispatch();
   const { colors } = useTheme();
@@ -36,8 +51,8 @@ export default function BusSelectSeat({ navigation }) {
 
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [comment, setComment] = useState('');
-  const [date, setDate] = useState(new Date())
+  const [comment, setComment] = useState("");
+  const [date, setDate] = useState(new Date());
   const [refreshing] = useState(false);
 
   const [state, setState] = React.useState({ open: false });
@@ -47,211 +62,214 @@ export default function BusSelectSeat({ navigation }) {
   const { open } = state;
 
   uploadPicture = () => {
-    navigation.navigate('CheckOut');
+    navigation.navigate("CheckOut");
   };
   uploadFile = () => {
-    navigation.navigate('Coupons');
-  }
+    navigation.navigate("Coupons");
+  };
   uploadVideo = () => {
-    navigation.navigate('More');
+    navigation.navigate("More");
   };
 
   uploadAudio = () => {
-    navigation.navigate('OurService');
+    navigation.navigate("OurService");
   };
 
   removePhoto = async (index) => {
     dispatch(MediaActions.onRemoveImage(index));
     setRefresh(!refresh);
-  }
+  };
   removeFile = async (index) => {
     dispatch(MediaActions.onRemoveFile(index));
     setRefresh(!refresh);
-  }
+  };
   removeVideo = async () => {
     dispatch(MediaActions.onAddVideo(null));
     setRefresh(!refresh);
-  }
+  };
   removeAudio = async () => {
     dispatch(MediaActions.onAddAudio(null));
     setRefresh(!refresh);
-  }
-
+  };
 
   reset = () => {
-    setComment('');
+    setComment("");
     dispatch(MediaActions.onResetMedia());
     setRefresh(!refresh);
-  }
+  };
 
   getFilenameFromUrl = (url) => {
-    const index = url.lastIndexOf('/');
-    return (-1 !== index) ? url.substring(index + 1) : url;
-  }
+    const index = url.lastIndexOf("/");
+    return -1 !== index ? url.substring(index + 1) : url;
+  };
 
   const authAxios = Axios.create({
-    baseURL: BaseSetting.apiUrl + '/api',
-    timeout: 1800
+    baseURL: BaseSetting.apiUrl + "/api",
+    timeout: 1800,
   });
 
-  authAxios.interceptors.response.use((response) => {
-    return response;
-  }, function (error) {
-
-    return Promise.reject(error.response);
-  });
+  authAxios.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    function (error) {
+      return Promise.reject(error.response);
+    }
+  );
 
   const getCredentials = async (file, storageId) => {
-    return authAxios.get('/tenant/' + BaseSetting.tenantId + '/file/credentials',
-      {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          'Accept-Language': language === 'fr' ? 'es' : language
-        },
-        params: {
-          filename: file.name,
-          storageId: storageId
-        }
+    return authAxios.get("/tenant/" + tenantId + "/file/credentials", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": language === "fr" ? "es" : language,
       },
-    )
-  }
+      params: {
+        filename: file.name,
+        storageId: storageId,
+      },
+    });
+  };
 
   const uploadToServer = async (file, data) => {
     try {
-
-      const url = data.data.uploadCredentials.url.replace("http://localhost:8080", BaseSetting.apiUrl);
+      const url = data.data.uploadCredentials.url.replace(
+        "http://localhost:8080",
+        BaseSetting.apiUrl
+      );
       const formData = new FormData();
       for (const [key, value] of Object.entries(
-        data.data.uploadCredentials.fields || {},
+        data.data.uploadCredentials.fields || {}
       )) {
         formData.append(key, value);
       }
-      formData.append('file', file);
+      formData.append("file", file);
       return authAxios.post(url, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          "Authorization": `Bearer ${token}`,
-          'Accept-Language': language === 'fr' ? 'es' : language
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": language === "fr" ? "es" : language,
         },
-      })
+      });
       // .then(() =>
       //   setSendingTestimony(false)
       // )
-    }
-    catch (error) {
-      setSendingTestimony(false)
+    } catch (error) {
+      setSendingTestimony(false);
       console.error(error);
       alert(
-        t('error'),
+        t("error"),
         error.message,
-        [
-          { text: t('tryAgain'), onPress: this.getData },
-        ],
+        [{ text: t("tryAgain"), onPress: this.getData }],
         { cancelable: false }
       );
     }
   };
 
   saveActivity = async () => {
-    setSendingTestimony(true)
+    setSendingTestimony(true);
     let documents = [];
     if (files !== null) {
       for (let i = 0; i < files.length; i++) {
-        const data = await getCredentials(files[i], 'activityDocuments');
+        const data = await getCredentials(files[i], "activityDocuments");
         uploadToServer(files[i], data);
         documents.push({
           name: files[i].name,
           privateUrl: data.data.privateUrl,
-          publicUrl: '',
-        })
+          publicUrl: "",
+        });
       }
     }
     let imgs = [];
     if (images !== null) {
       for (let i = 0; i < images.length; i++) {
-        const data = await getCredentials(images[i], 'activityImages');
+        const data = await getCredentials(images[i], "activityImages");
         uploadToServer(images[i], data);
         imgs.push({
           name: this.getFilenameFromUrl(images[i].uri),
           privateUrl: data.data.privateUrl,
-          publicUrl: '',
-        })
+          publicUrl: "",
+        });
       }
     }
     let vid = [];
     if (video !== null) {
-      const data = await getCredentials(video, 'activityVideo');
+      const data = await getCredentials(video, "activityVideo");
       uploadToServer(video, data);
       vid.push({
         name: video.name,
         privateUrl: data.data.privateUrl,
-        publicUrl: '',
-      })
+        publicUrl: "",
+      });
     }
 
     let aud = [];
     if (audio !== null) {
-      const data = await getCredentials(audio, 'activityAudio');
+      const data = await getCredentials(audio, "activityAudio");
       uploadToServer(audio, data);
       aud.push({
         name: audio.name,
         privateUrl: data.data.privateUrl,
-        publicUrl: '',
-      })
+        publicUrl: "",
+      });
     }
 
     const data = {
-      "data": {
-        "comment": comment,
-        "images": imgs,
-        "video": vid,
-        "audio": aud,
-        "documents": documents,
-        "testimony": currentTestimony._id,
-        "date": date
-      }
-    }
+      data: {
+        comment: comment,
+        images: imgs,
+        video: vid,
+        audio: aud,
+        documents: documents,
+        testimony: currentTestimony._id,
+        date: date,
+      },
+    };
     try {
-      await authAxios.post(SERVER_URL_ACTIVITY, data, {
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": `Bearer ${token}`,
-          'Accept-Language': language === 'fr' ? 'es' : language
-        },
-      }).then(() => {
-        setSendingTestimony(false),
-          this.reset(),
-          Snackbar.show({
-            text: t('activitySaved'),
-            duration: Snackbar.LENGTH_LONG,
-          }),
-          navigation.navigate('AddPayment')
-      })
-    }
-    catch (error) {
+      await authAxios
+        .post(SERVER_URL_ACTIVITY, data, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            "Accept-Language": language === "fr" ? "es" : language,
+          },
+        })
+        .then(() => {
+          setSendingTestimony(false),
+            this.reset(),
+            Snackbar.show({
+              text: t("activitySaved"),
+              duration: Snackbar.LENGTH_LONG,
+            }),
+            navigation.navigate("AddPayment");
+        });
+    } catch (error) {
       setSendingTestimony(false),
         Snackbar.show({
           text: error.data,
           duration: Snackbar.LENGTH_LONG,
           action: {
-            text: t('tryAgain'),
-            textColor: 'green',
-            onPress: () => { navigation.goBack() },
+            text: t("tryAgain"),
+            textColor: "green",
+            onPress: () => {
+              navigation.goBack();
+            },
           },
-        })
+        });
     }
-  }
+  };
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <ScrollView forceInset={{ top: 'always' }} contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView
+          forceInset={{ top: "always" }}
+          contentContainerStyle={{ flexGrow: 1 }}>
           <Header
             style={styles.title}
-            title={t('activity')}
+            title={t("activity")}
             renderLeft={() => {
               return (
                 <Icon
-                  name="arrow-left"
+                  name='arrow-left'
                   size={20}
                   color={colors.primary}
                   enableRTL={true}
@@ -261,7 +279,7 @@ export default function BusSelectSeat({ navigation }) {
             renderRight={() => {
               return (
                 <Icon
-                  name="redo-alt"
+                  name='redo-alt'
                   size={20}
                   color={colors.primary}
                   enableRTL={true}
@@ -273,54 +291,51 @@ export default function BusSelectSeat({ navigation }) {
             }}
             onPressRight={() => this.reset()}
           />
-          {sendingTestimony ?
+          {sendingTestimony ? (
             <AnimatedLoader
               visible={true}
-              overlayColor="rgba(255,255,255,0.75)"
+              overlayColor='rgba(255,255,255,0.75)'
               source={require("../../assets/images/8447-loader-animation.json")}
               animationStyle={styles.lottie}
-              speed={1}
-            >
-              <Text>{t('loading')}</Text>
+              speed={1}>
+              <Text>{t("loading")}</Text>
             </AnimatedLoader>
-            :
-            null
-          }
+          ) : null}
           <Text headline semibold style={{ margin: 10 }}>
-            {t('detail')}
+            {t("detail")}
           </Text>
           <TextInput
             style={{ margin: 5, height: 100 }}
             onChangeText={(text) => setComment(text)}
             multiline={true}
-            placeholder={t('comment')}
+            placeholder={t("comment")}
             textAlignVertical='top'
             value={comment}
-
           />
 
-          <View style={{ flexDirection: 'row', marginTop: 10 }}>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View style={{ flex: 1 }}>
-              <View
-                style={[styles.inputItem]}
-              >
+              <View style={[styles.inputItem]}>
                 <Modal
                   isVisible={modalVisible}
-                  backdropColor="rgba(0, 0, 0, 0.5)"
+                  backdropColor='rgba(0, 0, 0, 0.5)'
                   backdropOpacity={1}
-                  animationIn="fadeIn"
+                  animationIn='fadeIn'
                   animationInTiming={600}
                   animationOutTiming={600}
                   backdropTransitionInTiming={600}
                   backdropTransitionOutTiming={600}>
-                  <View style={[styles.contentCalendar, { backgroundColor: colors.card }]}>
-
+                  <View
+                    style={[
+                      styles.contentCalendar,
+                      { backgroundColor: colors.card },
+                    ]}>
                     <DatePicker
                       style={{ padding: 5 }}
                       locale={language}
                       date={date}
                       onDateChange={setDate}
-                      mode="date"
+                      mode='date'
                     />
                     <View style={styles.contentActionCalendar}>
                       <TouchableOpacity
@@ -328,7 +343,7 @@ export default function BusSelectSeat({ navigation }) {
                           setModalVisible(false);
                           // onCancel();
                         }}>
-                        <Text body1>{t('cancel')}</Text>
+                        <Text body1>{t("cancel")}</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => {
@@ -336,7 +351,7 @@ export default function BusSelectSeat({ navigation }) {
                           // onChange();
                         }}>
                         <Text body1 primaryColor>
-                          {t('confirm')}
+                          {t("confirm")}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -347,23 +362,23 @@ export default function BusSelectSeat({ navigation }) {
                   style={styles.itemPick}
                   onPress={() => setModalVisible(true)}>
                   <Text caption1 light style={{ marginBottom: 5 }}>
-                    {t('confirm_date')}
+                    {t("confirm_date")}
                   </Text>
                   <Text headline semibold numberOfLines={1}>
-                    {Moment(date).format('YYYY/MM/DD')}
+                    {Moment(date).format("YYYY/MM/DD")}
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
           <Text headline semibold style={{ margin: 10 }}>
-            {t('attachment')}
+            {t("attachment")}
           </Text>
 
-          {images.length !== 0 ?
+          {images.length !== 0 ? (
             <View style={styles.titleView}>
               <Text title3 semibold>
-                {t('image')}
+                {t("image")}
               </Text>
               <FlatList
                 contentContainerStyle={{
@@ -386,22 +401,19 @@ export default function BusSelectSeat({ navigation }) {
                 )}
               />
             </View>
+          ) : null}
 
-            :
-            null
-          }
-
-          {video ?
+          {video ? (
             <View style={styles.titleView}>
               <Text title3 semibold>
-                {t('video')}
+                {t("video")}
               </Text>
               <Icon
-                name="times-circle"
+                name='times-circle'
                 size={22}
                 color={colors.primary}
                 onPress={() => this.removeVideo()}
-                style={{ alignSelf: 'flex-start' }}
+                style={{ alignSelf: "flex-start" }}
               />
               <VideoPlayer
                 video={{ uri: video.uri }}
@@ -409,28 +421,26 @@ export default function BusSelectSeat({ navigation }) {
                 endThumbnail={{ uri: video.uri }}
               />
             </View>
-            :
-            null
-          }
+          ) : null}
 
-          {audio ?
+          {audio ? (
             <View style={styles.titleView}>
               <Text title3 semibold>
-                {t('audio')}
+                {t("audio")}
               </Text>
               <Icon
-                name="times-circle"
+                name='times-circle'
                 size={22}
                 color={colors.primary}
                 onPress={() => this.removeAudio()}
-                style={{ alignSelf: 'flex-start' }}
+                style={{ alignSelf: "flex-start" }}
               />
-              <View style={{
-                paddingHorizontal: 20,
-                paddingTop: 20,
-                paddingBottom: 10,
-
-              }}>
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  paddingTop: 20,
+                  paddingBottom: 10,
+                }}>
                 <VideoPlayer
                   video={{ uri: audio.uri }}
                   thumbnail={{ uri: Images.audio }}
@@ -438,63 +448,58 @@ export default function BusSelectSeat({ navigation }) {
                 />
               </View>
             </View>
-            :
-            null
-          }
+          ) : null}
 
-          {files.length !== 0 ?
+          {files.length !== 0 ? (
             <View style={styles.titleView}>
               <Text title3 semibold>
-                {t('file')}
+                {t("file")}
               </Text>
               {files.map((item, key) => (
                 <View key={key}>
                   <ListThumbCircle
                     txtRight={
                       <Icon
-                        name="times-circle"
+                        name='times-circle'
                         size={22}
                         color={colors.primary}
                         onPress={() => this.removeFile(key)}
-                      />}
+                      />
+                    }
                     txtContent={item.name}
                   />
                 </View>
               ))}
             </View>
-
-            :
-            null
-          }
-
+          ) : null}
         </ScrollView>
         <Provider style={styles.fab}>
           <Portal>
             <FAB.Group
               open={open}
-              icon={open ? 'close' : 'plus'}
+              icon={open ? "close" : "plus"}
               actions={[
                 {
-                  icon: 'file',
-                  label: t('addFile'),
+                  icon: "file",
+                  label: t("addFile"),
                   color: colors.primary,
-                  onPress: () => this.uploadFile()
+                  onPress: () => this.uploadFile(),
                 },
                 {
-                  icon: 'camera',
-                  label: t('addImage'),
+                  icon: "camera",
+                  label: t("addImage"),
                   color: colors.primary,
                   onPress: () => this.uploadPicture(),
                 },
                 {
-                  icon: 'video',
-                  label: t('addVideo'),
+                  icon: "video",
+                  label: t("addVideo"),
                   color: colors.primary,
                   onPress: () => this.uploadVideo(),
                 },
                 {
-                  icon: 'microphone',
-                  label: t('addAudio'),
+                  icon: "microphone",
+                  label: t("addAudio"),
                   color: colors.primary,
                   onPress: () => this.uploadAudio(),
                 },
@@ -508,26 +513,23 @@ export default function BusSelectSeat({ navigation }) {
             />
           </Portal>
         </Provider>
-
       </View>
       <View
         style={[styles.contentButtonBottom, { borderTopColor: colors.border }]}>
-        <View style={{ alignItems: 'flex-start' }}>
+        <View style={{ alignItems: "flex-start" }}>
           <Text title4 primaryColor semibold style={{ marginRight: 5 }}>
-            {t('warning')}
+            {t("warning")}
           </Text>
           <Text caption1 semibold>
-            {t('irreversibleAction')}
+            {t("irreversibleAction")}
           </Text>
         </View>
         <Button
           loading={loading}
           onPress={() => this.saveActivity()}
           disabled={!Boolean(comment)}
-          style={!Boolean(comment) ?
-            styles.inactiveStyle : styles.activeStyle}
-        >
-          {t('send')}
+          style={!Boolean(comment) ? styles.inactiveStyle : styles.activeStyle}>
+          {t("send")}
         </Button>
       </View>
     </View>

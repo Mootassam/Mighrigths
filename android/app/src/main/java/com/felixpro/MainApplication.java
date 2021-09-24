@@ -1,4 +1,4 @@
-package com.felixpro;
+package com.migrights;
 
 import android.app.Application;
 import android.content.Context;
@@ -53,7 +53,7 @@ public class MainApplication extends Application implements ReactApplication {
   private static void initializeFlipper(Context context, ReactInstanceManager reactInstanceManager) {
     if (BuildConfig.DEBUG) {
       try {
-        Class<?> aClass = Class.forName("com.felixpro.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.migrights.ReactNativeFlipper");
         aClass.getMethod("initializeFlipper", Context.class, ReactInstanceManager.class).invoke(null, context,
             reactInstanceManager);
       } catch (ClassNotFoundException e) {

@@ -86,7 +86,7 @@ export default function BookingDetail({ navigation }) {
         renderLeft={() => {
           return (
             <Icon
-              name="arrow-left"
+              name='arrow-left'
               size={20}
               color={colors.primary}
               enableRTL={true}
@@ -143,13 +143,12 @@ function PreviewTab() {
       <View style={{ flex: 1 }}>
         <ScrollView
           forceInset={{ top: "always" }}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          contentContainerStyle={{ flexGrow: 1 }}>
           <View>
             <Text body1 semibold style={[styles.textView, { marginTop: 10 }]}>
               {t("title")}
             </Text>
-            <Text style={[styles.textArea]} textAlignVertical="top">
+            <Text style={[styles.textArea]} textAlignVertical='top'>
               {testimony.title}
             </Text>
           </View>
@@ -158,7 +157,7 @@ function PreviewTab() {
               <Text body1 semibold style={[styles.textView]}>
                 {t("category")}
               </Text>
-              <Text style={[styles.textArea]} textAlignVertical="top">
+              <Text style={[styles.textArea]} textAlignVertical='top'>
                 {testimony.category.titleFR}
               </Text>
             </View>
@@ -169,7 +168,7 @@ function PreviewTab() {
                 {t("category")}
               </Text>
 
-              <Text style={[styles.textArea]} textAlignVertical="top">
+              <Text style={[styles.textArea]} textAlignVertical='top'>
                 {testimony.category.titleEN}
               </Text>
             </View>
@@ -180,7 +179,7 @@ function PreviewTab() {
                 {t("category")}
               </Text>
 
-              <Text style={[styles.textArea]} textAlignVertical="top">
+              <Text style={[styles.textArea]} textAlignVertical='top'>
                 {testimony.category.titleAR}
               </Text>
             </View>
@@ -191,8 +190,7 @@ function PreviewTab() {
             </Text>
             <Text
               style={[styles.textArea, { height: 100 }]}
-              textAlignVertical="top"
-            >
+              textAlignVertical='top'>
               {testimony.description}
             </Text>
           </View>
@@ -201,7 +199,7 @@ function PreviewTab() {
               <Text body1 semibold style={styles.textView}>
                 {t("contact_details")}
               </Text>
-              <Text style={[styles.textArea]} textAlignVertical="top">
+              <Text style={[styles.textArea]} textAlignVertical='top'>
                 {testimony.contact}
               </Text>
             </View>
@@ -209,7 +207,7 @@ function PreviewTab() {
               <Text body1 semibold style={styles.textView}>
                 {t("region")}
               </Text>
-              <Text style={[styles.textArea]} textAlignVertical="top">
+              <Text style={[styles.textArea]} textAlignVertical='top'>
                 {testimony.region}
               </Text>
             </View>
@@ -231,8 +229,7 @@ function PreviewTab() {
                       <Tag
                         primary={item.checked}
                         style={{ marginLeft: 15, width: 80 }}
-                        outline={!item.checked}
-                      >
+                        outline={!item.checked}>
                         {item.titleFR}
                       </Tag>
                     )}
@@ -249,8 +246,7 @@ function PreviewTab() {
                       <Tag
                         primary={item.checked}
                         style={{ marginLeft: 15, width: 80 }}
-                        outline={!item.checked}
-                      >
+                        outline={!item.checked}>
                         {item.titleEN}
                       </Tag>
                     )}
@@ -267,8 +263,7 @@ function PreviewTab() {
                       <Tag
                         primary={item.checked}
                         style={{ marginLeft: 15, width: 80 }}
-                        outline={!item.checked}
-                      >
+                        outline={!item.checked}>
                         {item.titleAR}
                       </Tag>
                     )}
@@ -288,8 +283,7 @@ function PreviewTab() {
                     provider={PROVIDER_GOOGLE}
                     style={styles.map}
                     region={this.position}
-                    onRegionChange={() => {}}
-                  >
+                    onRegionChange={() => {}}>
                     <Marker
                       coordinate={{
                         latitude: position.latitude,
@@ -315,8 +309,9 @@ function PreviewTab() {
  * @extends {Component}
  */
 function MediaTab() {
+  const tenantId = useSelector((state) => state.media.tenant_id);
   const SERVER_URL_TESTIMONY =
-    BaseSetting.apiUrl + "/api/tenant/" + BaseSetting.tenantId + "/testimony";
+    BaseSetting.apiUrl + "/api/tenant/" + tenantId + "/testimony";
   const testimony = useSelector((state) => state.media.testimony_id);
   const images = useSelector((state) => state.media.images);
   const video = useSelector((state) => state.media.video);
@@ -405,16 +400,14 @@ function MediaTab() {
       <View style={{ flex: 1 }}>
         <ScrollView
           forceInset={{ top: "always" }}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          contentContainerStyle={{ flexGrow: 1 }}>
           {loading2 ? (
             <AnimatedLoader
               visible={true}
-              overlayColor="rgba(255,255,255,0.75)"
+              overlayColor='rgba(255,255,255,0.75)'
               source={require("../../assets/images/8447-loader-animation.json")}
               animationStyle={styles.lottie}
-              speed={1}
-            >
+              speed={1}>
               <Text>{t("loading")}</Text>
             </AnimatedLoader>
           ) : null}
@@ -484,8 +477,7 @@ function MediaTab() {
                   paddingHorizontal: 20,
                   paddingTop: 20,
                   paddingBottom: 10,
-                }}
-              >
+                }}>
                 <VideoPlayer
                   video={{
                     uri:
@@ -636,8 +628,7 @@ function HistoryTab({ navigation }) {
               style={[
                 styles.userContentMessage,
                 { backgroundColor: colors.primaryLight },
-              ]}
-            >
+              ]}>
               <Text body2 whiteColor>
                 {item.comment}
               </Text>
@@ -779,14 +770,12 @@ function HistoryTab({ navigation }) {
               flex: 7,
               backgroundColor: colors.card,
               borderRadius: 8,
-            }}
-          >
+            }}>
             <View
               style={[
                 styles.meContentMessage,
                 { backgroundColor: colors.card },
-              ]}
-            >
+              ]}>
               <Text body2>{item.comment}</Text>
 
               {item.images.length !== 0 ? (
@@ -906,16 +895,14 @@ function HistoryTab({ navigation }) {
     <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: "always" }}>
       <ScrollView
         forceInset={{ top: "always" }}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+        contentContainerStyle={{ flexGrow: 1 }}>
         {loading2 ? (
           <AnimatedLoader
             visible={true}
-            overlayColor="rgba(255,255,255,0.75)"
+            overlayColor='rgba(255,255,255,0.75)'
             source={require("../../assets/images/8447-loader-animation.json")}
             animationStyle={styles.lottie}
-            speed={1}
-          >
+            speed={1}>
             <Text>{t("loading")}</Text>
           </AnimatedLoader>
         ) : null}

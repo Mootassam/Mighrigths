@@ -26,11 +26,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.felixpro"
+        applicationId "com.migrights"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 15
-        versionName "1.1.1"
+        versionName "1.0"
         multiDexEnabled true
     }
 

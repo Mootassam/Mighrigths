@@ -1,7 +1,6 @@
-import React, { useState, Component, useEffect } from "react";
+import React, { useState, Component } from "react";
 import { useTheme, BaseSetting, Images } from "@config";
 import { useTranslation } from "react-i18next";
-import io from "socket.io-client";
 
 import { useSelector, useDispatch } from "react-redux";
 import { MediaActions } from "@actions";
@@ -29,11 +28,8 @@ import Axios from "axios";
 import AnimatedLoader from "react-native-animated-loader";
 
 export default function Messenger({ navigation }) {
-  var socket;
-  useEffect(() => {
-    this.socket = io(`http://85.159.212.11:3000`);
-  }, []);
-  const SERVER_URL_TESTIMONY = "/tenant/" + BaseSetting.tenantId + "/testimony";
+  const tenantId = useSelector((state) => state.media.tenant_id);
+  const SERVER_URL_TESTIMONY = "/tenant/" + tenantId + "/testimony";
 
   const images = useSelector((state) => state.media.images);
   const video = useSelector((state) => state.media.video);
@@ -119,19 +115,16 @@ export default function Messenger({ navigation }) {
   );
 
   const getCredentials = async (file, storageId) => {
-    return authAxios.get(
-      "/tenant/" + BaseSetting.tenantId + "/file/credentials",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Accept-Language": language === "fr" ? "es" : language,
-        },
-        params: {
-          filename: file.name,
-          storageId: storageId,
-        },
-      }
-    );
+    return authAxios.get("/tenant/" + tenantId + "/file/credentials", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": language === "fr" ? "es" : language,
+      },
+      params: {
+        filename: file.name,
+        storageId: storageId,
+      },
+    });
   };
 
   const uploadToServer = async (file, data) => {
@@ -246,8 +239,8 @@ export default function Messenger({ navigation }) {
           },
         })
         .then(() => {
-          setSendingTestimony(false), this.socket.emit("refresh", {});
-          this.reset(),
+          setSendingTestimony(false),
+            this.reset(),
             Snackbar.show({
               text: t("testimonySaved"),
               duration: Snackbar.LENGTH_LONG,
@@ -276,15 +269,14 @@ export default function Messenger({ navigation }) {
       <View style={{ flex: 1 }}>
         <ScrollView
           forceInset={{ top: "always" }}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          contentContainerStyle={{ flexGrow: 1 }}>
           <Header
             style={styles.title}
             title={t("Testimony")}
             renderLeft={() => {
               return (
                 <Icon
-                  name="arrow-left"
+                  name='arrow-left'
                   size={20}
                   color={colors.primary}
                   enableRTL={true}
@@ -294,7 +286,7 @@ export default function Messenger({ navigation }) {
             renderRight={() => {
               return (
                 <Icon
-                  name="redo-alt"
+                  name='redo-alt'
                   size={20}
                   color={colors.primary}
                   enableRTL={true}
@@ -309,11 +301,10 @@ export default function Messenger({ navigation }) {
           {sendingTestimony ? (
             <AnimatedLoader
               visible={true}
-              overlayColor="rgba(255,255,255,0.75)"
+              overlayColor='rgba(255,255,255,0.75)'
               source={require("../../assets/images/8447-loader-animation.json")}
               animationStyle={styles.lottie}
-              speed={1}
-            >
+              speed={1}>
               <Text>{t("loading")}</Text>
             </AnimatedLoader>
           ) : null}
@@ -325,7 +316,7 @@ export default function Messenger({ navigation }) {
             onChangeText={(text) => setDescription(text)}
             multiline={true}
             placeholder={t("description")}
-            textAlignVertical="top"
+            textAlignVertical='top'
             value={description}
           />
 
@@ -343,33 +334,34 @@ export default function Messenger({ navigation }) {
                 <Picker
                   style={styles.picker}
                   selectedValue={region}
-                  onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}
-                >
-                  <Picker.Item label={t("choose_region")} value="" />
-                  <Picker.Item label="Tunis" value="tunis" />
-                  <Picker.Item label="Ariana" value="ariana" />
-                  <Picker.Item label="Béja" value="beja" />
-                  <Picker.Item label="Ben Arous" value="ben_arouss" />
-                  <Picker.Item label="Bizerte" value="bizerte" />
-                  <Picker.Item label="Gabès" value="gabes" />
-                  <Picker.Item label="Gafsa" value="gafsa" />
-                  <Picker.Item label="Jendouba" value="jendouba" />
-                  <Picker.Item label="Kairouan" value="kairouan" />
-                  <Picker.Item label="Kasserine" value="kasserine" />
-                  <Picker.Item label="Kébili" value="kebili" />
-                  <Picker.Item label="Kef" value="kef" />
-                  <Picker.Item label="Mahdia" value="mahdia" />
-                  <Picker.Item label="Manouba" value="manouba" />
-                  <Picker.Item label="Médenine" value="medenine" />
-                  <Picker.Item label="Monastir" value="monastir" />
-                  <Picker.Item label="Nabeul" value="nabeul" />
-                  <Picker.Item label="Sfax" value="sfax" />
-                  <Picker.Item label="Sidi Bouzid" value="sidi_bouzid" />
-                  <Picker.Item label="Siliana" value="siliana" />
-                  <Picker.Item label="Sousse" value="sousse" />
-                  <Picker.Item label="Tataouine" value="tataouine" />
-                  <Picker.Item label="Tozeur" value="tozeur" />
-                  <Picker.Item label="Zaghouan" value="zaghouan" />
+                  onValueChange={(itemValue, itemIndex) =>
+                    setRegion(itemValue)
+                  }>
+                  <Picker.Item label={t("choose_region")} value='' />
+                  <Picker.Item label='Tunis' value='tunis' />
+                  <Picker.Item label='Ariana' value='ariana' />
+                  <Picker.Item label='Béja' value='beja' />
+                  <Picker.Item label='Ben Arous' value='ben_arouss' />
+                  <Picker.Item label='Bizerte' value='bizerte' />
+                  <Picker.Item label='Gabès' value='gabes' />
+                  <Picker.Item label='Gafsa' value='gafsa' />
+                  <Picker.Item label='Jendouba' value='jendouba' />
+                  <Picker.Item label='Kairouan' value='kairouan' />
+                  <Picker.Item label='Kasserine' value='kasserine' />
+                  <Picker.Item label='Kébili' value='kebili' />
+                  <Picker.Item label='Kef' value='kef' />
+                  <Picker.Item label='Mahdia' value='mahdia' />
+                  <Picker.Item label='Manouba' value='manouba' />
+                  <Picker.Item label='Médenine' value='medenine' />
+                  <Picker.Item label='Monastir' value='monastir' />
+                  <Picker.Item label='Nabeul' value='nabeul' />
+                  <Picker.Item label='Sfax' value='sfax' />
+                  <Picker.Item label='Sidi Bouzid' value='sidi_bouzid' />
+                  <Picker.Item label='Siliana' value='siliana' />
+                  <Picker.Item label='Sousse' value='sousse' />
+                  <Picker.Item label='Tataouine' value='tataouine' />
+                  <Picker.Item label='Tozeur' value='tozeur' />
+                  <Picker.Item label='Zaghouan' value='zaghouan' />
                 </Picker>
               </View>
             ) : null}
@@ -378,33 +370,34 @@ export default function Messenger({ navigation }) {
                 <Picker
                   style={styles.picker}
                   selectedValue={region}
-                  onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}
-                >
-                  <Picker.Item label={t("choose_region")} value="" />
-                  <Picker.Item label="Tunis" value="tunis" />
-                  <Picker.Item label="Ariana" value="ariana" />
-                  <Picker.Item label="Béja" value="beja" />
-                  <Picker.Item label="Ben Arous" value="ben_arouss" />
-                  <Picker.Item label="Bizerte" value="bizerte" />
-                  <Picker.Item label="Gabès" value="gabes" />
-                  <Picker.Item label="Gafsa" value="gafsa" />
-                  <Picker.Item label="Jendouba" value="jendouba" />
-                  <Picker.Item label="Kairouan" value="kairouan" />
-                  <Picker.Item label="Kasserine" value="kasserine" />
-                  <Picker.Item label="Kébili" value="kebili" />
-                  <Picker.Item label="Kef" value="kef" />
-                  <Picker.Item label="Mahdia" value="mahdia" />
-                  <Picker.Item label="Manouba" value="manouba" />
-                  <Picker.Item label="Médenine" value="medenine" />
-                  <Picker.Item label="Monastir" value="monastir" />
-                  <Picker.Item label="Nabeul" value="nabeul" />
-                  <Picker.Item label="Sfax" value="sfax" />
-                  <Picker.Item label="Sidi Bouzid" value="sidi_bouzid" />
-                  <Picker.Item label="Siliana" value="siliana" />
-                  <Picker.Item label="Sousse" value="sousse" />
-                  <Picker.Item label="Tataouine" value="tataouine" />
-                  <Picker.Item label="Tozeur" value="tozeur" />
-                  <Picker.Item label="Zaghouan" value="zaghouan" />
+                  onValueChange={(itemValue, itemIndex) =>
+                    setRegion(itemValue)
+                  }>
+                  <Picker.Item label={t("choose_region")} value='' />
+                  <Picker.Item label='Tunis' value='tunis' />
+                  <Picker.Item label='Ariana' value='ariana' />
+                  <Picker.Item label='Béja' value='beja' />
+                  <Picker.Item label='Ben Arous' value='ben_arouss' />
+                  <Picker.Item label='Bizerte' value='bizerte' />
+                  <Picker.Item label='Gabès' value='gabes' />
+                  <Picker.Item label='Gafsa' value='gafsa' />
+                  <Picker.Item label='Jendouba' value='jendouba' />
+                  <Picker.Item label='Kairouan' value='kairouan' />
+                  <Picker.Item label='Kasserine' value='kasserine' />
+                  <Picker.Item label='Kébili' value='kebili' />
+                  <Picker.Item label='Kef' value='kef' />
+                  <Picker.Item label='Mahdia' value='mahdia' />
+                  <Picker.Item label='Manouba' value='manouba' />
+                  <Picker.Item label='Médenine' value='medenine' />
+                  <Picker.Item label='Monastir' value='monastir' />
+                  <Picker.Item label='Nabeul' value='nabeul' />
+                  <Picker.Item label='Sfax' value='sfax' />
+                  <Picker.Item label='Sidi Bouzid' value='sidi_bouzid' />
+                  <Picker.Item label='Siliana' value='siliana' />
+                  <Picker.Item label='Sousse' value='sousse' />
+                  <Picker.Item label='Tataouine' value='tataouine' />
+                  <Picker.Item label='Tozeur' value='tozeur' />
+                  <Picker.Item label='Zaghouan' value='zaghouan' />
                 </Picker>
               </View>
             ) : null}
@@ -413,33 +406,34 @@ export default function Messenger({ navigation }) {
                 <Picker
                   style={styles.picker}
                   selectedValue={region}
-                  onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}
-                >
-                  <Picker.Item label={t("choose_region")} value="" />
-                  <Picker.Item label="تونس" value="tunis" />
-                  <Picker.Item label="أريانة" value="ariana" />
-                  <Picker.Item label="باجة" value="beja" />
-                  <Picker.Item label="بن عروس" value="ben_arouss" />
-                  <Picker.Item label="بنزرت" value="bizerte" />
-                  <Picker.Item label="قابس" value="gabes" />
-                  <Picker.Item label="قفصة" value="gafsa" />
-                  <Picker.Item label="جندوبة" value="jendouba" />
-                  <Picker.Item label="القيروان" value="kairouan" />
-                  <Picker.Item label="القصرين" value="kasserine" />
-                  <Picker.Item label="قبلي" value="kebili" />
-                  <Picker.Item label="الكاف" value="kef" />
-                  <Picker.Item label="المهدية" value="mahdia" />
-                  <Picker.Item label="منوبة" value="manouba" />
-                  <Picker.Item label="مدنين" value="medenine" />
-                  <Picker.Item label="المنستير" value="monastir" />
-                  <Picker.Item label="نابل" value="nabeul" />
-                  <Picker.Item label="صفاقس" value="sfax" />
-                  <Picker.Item label="سيدي بوزيد" value="sidi_bouzid" />
-                  <Picker.Item label="سليانة" value="siliana" />
-                  <Picker.Item label="سوسة" value="sousse" />
-                  <Picker.Item label="تطاوين" value="tataouine" />
-                  <Picker.Item label="توزر" value="tozeur" />
-                  <Picker.Item label="زغوان" value="zaghouan" />
+                  onValueChange={(itemValue, itemIndex) =>
+                    setRegion(itemValue)
+                  }>
+                  <Picker.Item label={t("choose_region")} value='' />
+                  <Picker.Item label='تونس' value='tunis' />
+                  <Picker.Item label='أريانة' value='ariana' />
+                  <Picker.Item label='باجة' value='beja' />
+                  <Picker.Item label='بن عروس' value='ben_arouss' />
+                  <Picker.Item label='بنزرت' value='bizerte' />
+                  <Picker.Item label='قابس' value='gabes' />
+                  <Picker.Item label='قفصة' value='gafsa' />
+                  <Picker.Item label='جندوبة' value='jendouba' />
+                  <Picker.Item label='القيروان' value='kairouan' />
+                  <Picker.Item label='القصرين' value='kasserine' />
+                  <Picker.Item label='قبلي' value='kebili' />
+                  <Picker.Item label='الكاف' value='kef' />
+                  <Picker.Item label='المهدية' value='mahdia' />
+                  <Picker.Item label='منوبة' value='manouba' />
+                  <Picker.Item label='مدنين' value='medenine' />
+                  <Picker.Item label='المنستير' value='monastir' />
+                  <Picker.Item label='نابل' value='nabeul' />
+                  <Picker.Item label='صفاقس' value='sfax' />
+                  <Picker.Item label='سيدي بوزيد' value='sidi_bouzid' />
+                  <Picker.Item label='سليانة' value='siliana' />
+                  <Picker.Item label='سوسة' value='sousse' />
+                  <Picker.Item label='تطاوين' value='tataouine' />
+                  <Picker.Item label='توزر' value='tozeur' />
+                  <Picker.Item label='زغوان' value='zaghouan' />
                 </Picker>
               </View>
             ) : null}
@@ -482,7 +476,7 @@ export default function Messenger({ navigation }) {
                 {t("video")}
               </Text>
               <Icon
-                name="times-circle"
+                name='times-circle'
                 size={22}
                 color={colors.primary}
                 onPress={() => this.removeVideo()}
@@ -502,7 +496,7 @@ export default function Messenger({ navigation }) {
                 {t("audio")}
               </Text>
               <Icon
-                name="times-circle"
+                name='times-circle'
                 size={22}
                 color={colors.primary}
                 onPress={() => this.removeAudio()}
@@ -513,8 +507,7 @@ export default function Messenger({ navigation }) {
                   paddingHorizontal: 20,
                   paddingTop: 20,
                   paddingBottom: 10,
-                }}
-              >
+                }}>
                 <VideoPlayer
                   video={{ uri: audio.uri }}
                   thumbnail={{ uri: Images.audio }}
@@ -534,7 +527,7 @@ export default function Messenger({ navigation }) {
                   <ListThumbCircle
                     txtRight={
                       <Icon
-                        name="times-circle"
+                        name='times-circle'
                         size={22}
                         color={colors.primary}
                         onPress={() => this.removeFile(key)}
@@ -589,8 +582,7 @@ export default function Messenger({ navigation }) {
         </Provider>
       </View>
       <View
-        style={[styles.contentButtonBottom, { borderTopColor: colors.border }]}
-      >
+        style={[styles.contentButtonBottom, { borderTopColor: colors.border }]}>
         <View style={{ alignItems: "flex-start" }}>
           <Text title4 primaryColor semibold style={{ marginRight: 5 }}>
             {t("warning")}
@@ -607,8 +599,7 @@ export default function Messenger({ navigation }) {
             !Boolean(contact && description && region)
               ? styles.inactiveStyle
               : styles.activeStyle
-          }
-        >
+          }>
           {t("send")}
         </Button>
       </View>

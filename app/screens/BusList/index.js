@@ -49,21 +49,6 @@ export default function BusList({ navigation }) {
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
 
-  // const [name, setName] = useState('');
-  // const [email, setEmail] = useState('');
-  // const [message, setMessage] = useState('');
-  // const [success, setSuccess] = useState({
-  //   name: true,
-  //   email: true,
-  //   message: true,
-  // });
-  // const [region] = useState({
-  //   latitude: 10.73902,
-  //   longitude: 106.704938,
-  //   latitudeDelta: 0.009,
-  //   longitudeDelta: 0.004,
-  // });
-
   /**
    * @description Called when user sumitted form
    * @author Passion UI <passionui.com>
@@ -125,14 +110,13 @@ export default function BusList({ navigation }) {
     return (
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        forceInset={{ top: "always" }}
-      >
+        forceInset={{ top: "always" }}>
         <Header
           title={t("assistance")}
           renderLeft={() => {
             return (
               <Icon
-                name="arrow-left"
+                name='arrow-left'
                 size={20}
                 color={colors.primary}
                 enableRTL={true}
@@ -146,8 +130,7 @@ export default function BusList({ navigation }) {
         <KeyboardAvoidingView
           behavior={Platform.OS === "android" ? "height" : "padding"}
           keyboardVerticalOffset={offsetKeyboard}
-          style={{ flex: 1 }}
-        >
+          style={{ flex: 1 }}>
           <View style={styles.content} activeOpacity={1}>
             <Image source={Images.blank} style={styles.blockImage} />
             <Text body1 grayColor>
@@ -159,8 +142,7 @@ export default function BusList({ navigation }) {
               loading={loading3}
               onPress={() => {
                 signIn();
-              }}
-            >
+              }}>
               {t("sign_in")}
             </Button>
           </View>
@@ -169,8 +151,7 @@ export default function BusList({ navigation }) {
               loading={loading2}
               onPress={() => {
                 signUp();
-              }}
-            >
+              }}>
               {t("createAccount")}
             </Button>
           </View>
@@ -181,14 +162,13 @@ export default function BusList({ navigation }) {
     return (
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        forceInset={{ top: "always" }}
-      >
+        forceInset={{ top: "always" }}>
         <Header
           title={t("assistance")}
           renderLeft={() => {
             return (
               <Icon
-                name="arrow-left"
+                name='arrow-left'
                 size={20}
                 color={colors.primary}
                 enableRTL={true}
@@ -212,6 +192,8 @@ export default function BusList({ navigation }) {
 }
 
 function InProgressTab({ navigation }) {
+  const tenantId = useSelector((state) => state.media.tenant_id);
+
   const [testimonies, setTestimonies] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const dispatch = useDispatch();
@@ -219,7 +201,7 @@ function InProgressTab({ navigation }) {
   const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState(i18n.language);
 
-  const SERVER_URL_TESTIMONY = "/tenant/" + BaseSetting.tenantId + "/testimony";
+  const SERVER_URL_TESTIMONY = "/tenant/" + tenantId + "/testimony";
 
   const currentUser = useSelector((state) => state.media.user_id);
   const token = useSelector((state) => state.media.token);
@@ -344,16 +326,14 @@ function InProgressTab({ navigation }) {
     <View style={{ flex: 1 }}>
       <ScrollView
         forceInset={{ top: "always" }}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+        contentContainerStyle={{ flexGrow: 1 }}>
         {loadingData ? (
           <AnimatedLoader
             visible={true}
-            overlayColor="rgba(255,255,255,0.75)"
+            overlayColor='rgba(255,255,255,0.75)'
             source={require("../../assets/images/8447-loader-animation.json")}
             animationStyle={styles.lottie}
-            speed={1}
-          >
+            speed={1}>
             <Text>{t("loading")}</Text>
           </AnimatedLoader>
         ) : (
@@ -370,8 +350,7 @@ function InProgressTab({ navigation }) {
                   margin: 20,
                   padding: 10,
                 }}
-                activeOpacity={1}
-              >
+                activeOpacity={1}>
                 <Text body1 grayColor>
                   {t("noData")}
                 </Text>
@@ -422,12 +401,14 @@ function InProgressTab({ navigation }) {
 }
 
 function HistoryTab({ navigation }) {
+  const tenantId = useSelector((state) => state.media.tenant_id);
+
   const [testimonies, setTestimonies] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const dispatch = useDispatch();
   closedTestimonies = [];
 
-  const SERVER_URL_TESTIMONY = "/tenant/" + BaseSetting.tenantId + "/testimony";
+  const SERVER_URL_TESTIMONY = "/tenant/" + tenantId + "/testimony";
 
   const currentUser = useSelector((state) => state.media.user_id);
   const token = useSelector((state) => state.media.token);
@@ -554,16 +535,14 @@ function HistoryTab({ navigation }) {
     <View>
       <ScrollView
         forceInset={{ top: "always" }}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+        contentContainerStyle={{ flexGrow: 1 }}>
         {loadingData ? (
           <AnimatedLoader
             visible={true}
-            overlayColor="rgba(255,255,255,0.75)"
+            overlayColor='rgba(255,255,255,0.75)'
             source={require("../../assets/images/8447-loader-animation.json")}
             animationStyle={styles.lottie}
-            speed={1}
-          >
+            speed={1}>
             <Text>{t("loading")}</Text>
           </AnimatedLoader>
         ) : (
@@ -580,8 +559,7 @@ function HistoryTab({ navigation }) {
                   margin: 20,
                   padding: 10,
                 }}
-                activeOpacity={1}
-              >
+                activeOpacity={1}>
                 <Text body1 grayColor>
                   {t("noData")}
                 </Text>

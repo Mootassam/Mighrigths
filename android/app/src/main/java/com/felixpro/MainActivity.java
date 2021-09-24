@@ -1,4 +1,4 @@
-package com.felixpro;
+package com.migrights;
 import org.devio.rn.splashscreen.SplashScreen;
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;

@@ -1,12 +1,13 @@
-import * as actionTypes from '@actions/actionTypes';
+import * as actionTypes from "@actions/actionTypes";
 const initialState = {
   images: [],
   video: null,
   audio: null,
   files: [],
   user_id: null,
-  token: '',
-  testimony_id: null
+  token: "",
+  testimony_id: null,
+  tenant_id: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -45,7 +46,7 @@ export default (state = initialState, action = {}) => {
       updatedFiles.splice(fileIndex, 1);
       return {
         ...state,
-        files: updatedFiles
+        files: updatedFiles,
       };
     case actionTypes.REMOVE_IMAGE:
       const imageIndex = action.imageIndex;
@@ -59,23 +60,29 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         user_id: action.user_id,
+        tenant_id: action.tenant_id,
       };
     case actionTypes.TOKEN:
       return {
         ...state,
-        token: action.token
+        token: action.token,
       };
     case actionTypes.SIGN_OUT:
       return {
         ...state,
-        token: '',
+        token: "",
         user_id: null,
-        testimony_id: null
+        testimony_id: null,
       };
     case actionTypes.TESTIMONY_ID:
       return {
         ...state,
-        testimony_id: action.testimony_id
+        testimony_id: action.testimony_id,
+      };
+    case actionTypes.TENANT_ID:
+      return {
+        ...state,
+        tenant_id: action.tenant_id,
       };
     default:
       return state;

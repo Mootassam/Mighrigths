@@ -1,4 +1,4 @@
-package com.felixpro;
+package com.migrights;
 
 import android.content.Context;
 import com.facebook.flipper.android.AndroidFlipperClient;

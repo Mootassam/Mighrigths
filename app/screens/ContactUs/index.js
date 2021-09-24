@@ -57,10 +57,11 @@ export default function ContactUs({ navigation }) {
    * @author Passion UI <passionui.com>
    * @date 2019-08-03
    */
+  const tenantId = useSelector((state) => state.media.tenant_id);
 
-  const SERVER_URL = "/tenant/" + BaseSetting.tenantId + "/auth/sign-in";
+  const SERVER_URL = "/tenant/" + tenantId + "/auth/sign-in";
   const SERVER_URL_ME = "/auth/me";
-  const SERVER_URL_TESTIMONY = "/tenant/" + BaseSetting.tenantId + "/testimony";
+  const SERVER_URL_TESTIMONY = "/tenant/" + tenantId + "/testimony";
 
   const currentUser = useSelector((state) => state.media.user_id);
   const token = useSelector((state) => state.media.token);
@@ -91,7 +92,9 @@ export default function ContactUs({ navigation }) {
           },
         })
         .then((res) => {
-          dispatch(MediaActions.onCurrentUser(res.data));
+          dispatch(
+            MediaActions.onCurrentUser(res.data, res.data.tenants[0].tenant._id)
+          );
         });
     } catch (error) {
       setLoading(false);
@@ -220,14 +223,13 @@ export default function ContactUs({ navigation }) {
     return (
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        forceInset={{ top: "always" }}
-      >
+        forceInset={{ top: "always" }}>
         <Header
           title={t("Testimonies")}
           renderLeft={() => {
             return (
               <Icon
-                name="arrow-left"
+                name='arrow-left'
                 size={20}
                 color={colors.primary}
                 enableRTL={true}
@@ -241,19 +243,17 @@ export default function ContactUs({ navigation }) {
         {loading ? (
           <AnimatedLoader
             visible={true}
-            overlayColor="rgba(255,255,255,0.75)"
+            overlayColor='rgba(255,255,255,0.75)'
             source={require("../../assets/images/8447-loader-animation.json")}
             animationStyle={styles.lottie}
-            speed={1}
-          >
+            speed={1}>
             <Text>{t("loading")}</Text>
           </AnimatedLoader>
         ) : null}
         <KeyboardAvoidingView
           behavior={Platform.OS === "android" ? "height" : "padding"}
           keyboardVerticalOffset={offsetKeyboard}
-          style={{ flex: 1 }}
-        >
+          style={{ flex: 1 }}>
           <View style={styles.content} activeOpacity={1}>
             <Image source={Images.blank} style={styles.blockImage} />
             <Text body1 grayColor>
@@ -265,8 +265,7 @@ export default function ContactUs({ navigation }) {
               loading={loading3}
               onPress={() => {
                 signIn();
-              }}
-            >
+              }}>
               {t("sign_in")}
             </Button>
           </View>
@@ -275,8 +274,7 @@ export default function ContactUs({ navigation }) {
               loading={loading2}
               onPress={() => {
                 signUp();
-              }}
-            >
+              }}>
               {t("createAccount")}
             </Button>
           </View>
@@ -285,8 +283,7 @@ export default function ContactUs({ navigation }) {
             <Button
               onPress={() => {
                 anounymousLogin();
-              }}
-            >
+              }}>
               {t("sendAnonymousTestimony")}
             </Button>
           </View>
@@ -297,14 +294,13 @@ export default function ContactUs({ navigation }) {
     return (
       <SafeAreaView
         style={BaseStyle.safeAreaView}
-        forceInset={{ top: "always" }}
-      >
+        forceInset={{ top: "always" }}>
         <Header
           title={t("Testimonies")}
           renderLeft={() => {
             return (
               <Icon
-                name="arrow-left"
+                name='arrow-left'
                 size={20}
                 color={colors.primary}
                 enableRTL={true}
@@ -328,12 +324,13 @@ export default function ContactUs({ navigation }) {
 }
 
 function InProgressTab({ navigation }) {
+  const tenantId = useSelector((state) => state.media.tenant_id);
   const [testimonies, setTestimonies] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState(i18n.language);
-  const SERVER_URL_TESTIMONY = "/tenant/" + BaseSetting.tenantId + "/testimony";
+  const SERVER_URL_TESTIMONY = "/tenant/" + tenantId + "/testimony";
 
   const currentUser = useSelector((state) => state.media.user_id);
   const token = useSelector((state) => state.media.token);
@@ -434,16 +431,14 @@ function InProgressTab({ navigation }) {
     <View style={{ flex: 1 }}>
       <ScrollView
         forceInset={{ top: "always" }}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+        contentContainerStyle={{ flexGrow: 1 }}>
         {loadingData ? (
           <AnimatedLoader
             visible={true}
-            overlayColor="rgba(255,255,255,0.75)"
+            overlayColor='rgba(255,255,255,0.75)'
             source={require("../../assets/images/8447-loader-animation.json")}
             animationStyle={styles.lottie}
-            speed={1}
-          >
+            speed={1}>
             <Text>{t("loading")}</Text>
           </AnimatedLoader>
         ) : (
@@ -460,8 +455,7 @@ function InProgressTab({ navigation }) {
                   margin: 20,
                   padding: 10,
                 }}
-                activeOpacity={1}
-              >
+                activeOpacity={1}>
                 <Text body1 grayColor>
                   {t("noData")}
                 </Text>
@@ -512,12 +506,13 @@ function InProgressTab({ navigation }) {
 }
 
 function HistoryTab({ navigation }) {
+  const tenantId = useSelector((state) => state.media.tenant_id);
   const [testimonies, setTestimonies] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const dispatch = useDispatch();
   closedTestimonies = [];
 
-  const SERVER_URL_TESTIMONY = "/tenant/" + BaseSetting.tenantId + "/testimony";
+  const SERVER_URL_TESTIMONY = "/tenant/" + tenantId + "/testimony";
 
   const currentUser = useSelector((state) => state.media.user_id);
   const token = useSelector((state) => state.media.token);
@@ -619,16 +614,14 @@ function HistoryTab({ navigation }) {
     <View>
       <ScrollView
         forceInset={{ top: "always" }}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
+        contentContainerStyle={{ flexGrow: 1 }}>
         {loadingData ? (
           <AnimatedLoader
             visible={true}
-            overlayColor="rgba(255,255,255,0.75)"
+            overlayColor='rgba(255,255,255,0.75)'
             source={require("../../assets/images/8447-loader-animation.json")}
             animationStyle={styles.lottie}
-            speed={1}
-          >
+            speed={1}>
             <Text>{t("loading")}</Text>
           </AnimatedLoader>
         ) : (
@@ -645,8 +638,7 @@ function HistoryTab({ navigation }) {
                   margin: 20,
                   padding: 10,
                 }}
-                activeOpacity={1}
-              >
+                activeOpacity={1}>
                 <Text body1 grayColor>
                   {t("noData")}
                 </Text>
