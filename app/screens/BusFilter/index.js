@@ -55,6 +55,14 @@ export default function BusFilter({ navigation }) {
 
   const { open } = state;
 
+<<<<<<< HEAD
+=======
+  var socket;
+  useEffect(() => {
+    this.socket = io(`http://172.16.224.150:8080`);
+  }, []);
+
+>>>>>>> e83d3c477adf1550fbd417d798a15ba60f66c03b
   useEffect(() => {
     getCategories();
   }, []);

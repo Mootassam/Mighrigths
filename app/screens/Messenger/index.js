@@ -28,8 +28,16 @@ import Axios from "axios";
 import AnimatedLoader from "react-native-animated-loader";
 
 export default function Messenger({ navigation }) {
+<<<<<<< HEAD
   const tenantId = useSelector((state) => state.media.tenant_id);
   const SERVER_URL_TESTIMONY = "/tenant/" + tenantId + "/testimony";
+=======
+  var socket;
+  useEffect(() => {
+    this.socket = io(`http://172.16.224.150:8080`);
+  }, []);
+  const SERVER_URL_TESTIMONY = "/tenant/" + BaseSetting.tenantId + "/testimony";
+>>>>>>> e83d3c477adf1550fbd417d798a15ba60f66c03b
 
   const images = useSelector((state) => state.media.images);
   const video = useSelector((state) => state.media.video);

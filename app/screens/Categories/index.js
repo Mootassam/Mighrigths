@@ -15,7 +15,11 @@ export default function Categories({ navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
+<<<<<<< HEAD
       .get(`tenant/6156d6cac0c87c001e3f0a0b/information-category`)
+=======
+      .get(`tenant/60c23344ec1ee231dd3178c0/information-category`)
+>>>>>>> e83d3c477adf1550fbd417d798a15ba60f66c03b
       .then((json) => {
         setcategory(json.data.rows);
         setCount(json.data.count);

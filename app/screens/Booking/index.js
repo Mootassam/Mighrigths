@@ -26,7 +26,14 @@ import AnimatedLoader from "react-native-animated-loader";
 import Snackbar from "react-native-snackbar";
 
 export default function Booking({ navigation }) {
+<<<<<<< HEAD
   const tenantId = useSelector((state) => state.media.tenant_id);
+=======
+  var socket;
+  useEffect(() => {
+    this.socket = io(`http://172.16.224.150:8080`);
+  }, []);
+>>>>>>> e83d3c477adf1550fbd417d798a15ba60f66c03b
 
   const SERVER_URL_TESTIMONY = "/tenant/" + tenantId + "/testimony";
   const SERVER_URL_TESTIMONY_CATEGORY =

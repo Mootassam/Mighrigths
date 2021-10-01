@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { RefreshControl, View, Animated } from "react-native";
+import { RefreshControl, View, Animated, Alert } from "react-native";
 import { BaseStyle, useTheme, authAxios } from "@config";
 import { Header, SafeAreaView, Icon, HotelItem } from "@components";
 
@@ -17,7 +17,11 @@ export default function News({ navigation }) {
   const onScroll = useCallback(() => {
     setRefreshing(true);
     authAxios
+<<<<<<< HEAD
       .get(`tenant/6156d6cac0c87c001e3f0a0b/informations`)
+=======
+      .get(`tenant/60c23344ec1ee231dd3178c0/informations`)
+>>>>>>> e83d3c477adf1550fbd417d798a15ba60f66c03b
       .then((json) => {
         setInformation(json.data.rows);
         setRefreshing(false);
@@ -39,7 +43,11 @@ export default function News({ navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
+<<<<<<< HEAD
       .get(`tenant/6156d6cac0c87c001e3f0a0b/informations?limit=${offset}`)
+=======
+      .get(`tenant/60c23344ec1ee231dd3178c0/informations?limit=${offset}`)
+>>>>>>> e83d3c477adf1550fbd417d798a15ba60f66c03b
       .then((json) => {
         setOffset(offset + 6);
         setInformation(json.data.rows);

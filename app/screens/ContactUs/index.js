@@ -376,7 +376,7 @@ function InProgressTab({ navigation }) {
               this.openTestimonies.push(res.data.rows[i]);
             }
           }
-          console.log(this.openTestimonies);
+
           setTestimonies(this.openTestimonies), setLoadingData(false);
         });
     } catch (error) {
