@@ -15,7 +15,7 @@ export default function Categories({ navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60cb644c838c09001e1b60ed/information-category`)
+      .get(`tenant/6156d6cac0c87c001e3f0a0b/information-category`)
       .then((json) => {
         setcategory(json.data.rows);
         setCount(json.data.count);
@@ -40,8 +40,7 @@ export default function Categories({ navigation }) {
               infoId: item._id,
               Nom: item.titleFR,
             });
-          }}
-        >
+          }}>
           <View style={{ flexDirection: "row" }}>
             <Icon
               color={colors.primary}
@@ -53,7 +52,7 @@ export default function Categories({ navigation }) {
           </View>
 
           <Icon
-            name="angle-right"
+            name='angle-right'
             size={18}
             color={colors.primary}
             enableRTL={true}
@@ -70,8 +69,7 @@ export default function Categories({ navigation }) {
               infoId: item._id,
               Nom: item.titleEN,
             });
-          }}
-        >
+          }}>
           <View style={{ flexDirection: "row" }}>
             <Icon
               color={colors.primary}
@@ -83,7 +81,7 @@ export default function Categories({ navigation }) {
           </View>
 
           <Icon
-            name="angle-right"
+            name='angle-right'
             size={18}
             color={colors.primary}
             enableRTL={true}
@@ -100,8 +98,7 @@ export default function Categories({ navigation }) {
               infoId: item._id,
               Nom: item.titleAR,
             });
-          }}
-        >
+          }}>
           <View style={{ flexDirection: "row" }}>
             <Icon
               color={colors.primary}
@@ -113,7 +110,7 @@ export default function Categories({ navigation }) {
           </View>
 
           <Icon
-            name="angle-right"
+            name='angle-right'
             size={18}
             color={colors.primary}
             enableRTL={true}
@@ -130,7 +127,7 @@ export default function Categories({ navigation }) {
         renderLeft={() => {
           return (
             <Icon
-              name="arrow-left"
+              name='arrow-left'
               size={20}
               color={colors.primary}
               enableRTL={true}

@@ -40,7 +40,7 @@ export default function SearchHistory({ navigation }) {
 
     setLoading(true);
     authAxios
-      .get("/tenant/60cb644c838c09001e1b60ed/informations")
+      .get("/tenant/6156d6cac0c87c001e3f0a0b/informations")
       .then((res) => {
         setFilteredDataSource(res.data.rows);
         setMasterDataSource(res.data.rows);
@@ -102,12 +102,10 @@ export default function SearchHistory({ navigation }) {
             navigation.navigate("HotelDetail", {
               infoId: item._id,
             });
-          }}
-        >
+          }}>
           <SearchH
             title={item.titreEN}
-            description={item.descriptionEN}
-          ></SearchH>
+            description={item.descriptionEN}></SearchH>
         </TouchableOpacity>
       );
     } else if (language === "fr") {
@@ -118,12 +116,10 @@ export default function SearchHistory({ navigation }) {
             navigation.navigate("HotelDetail", {
               infoId: item._id,
             });
-          }}
-        >
+          }}>
           <SearchH
             title={item.titleFR}
-            description={item.descriptionFR}
-          ></SearchH>
+            description={item.descriptionFR}></SearchH>
         </TouchableOpacity>
       );
     } else if (language === "ar") {
@@ -134,12 +130,10 @@ export default function SearchHistory({ navigation }) {
             navigation.navigate("HotelDetail", {
               infoId: item._id,
             });
-          }}
-        >
+          }}>
           <SearchH
             title={item.titreAR}
-            description={item.descriptionAR}
-          ></SearchH>
+            description={item.descriptionAR}></SearchH>
         </TouchableOpacity>
       );
     }
@@ -150,11 +144,11 @@ export default function SearchHistory({ navigation }) {
       <Header
         title={t("search")}
         renderLeft={() => {
-          return <Icon name="times" size={20} color={colors.primary} />;
+          return <Icon name='times' size={20} color={colors.primary} />;
         }}
         renderRight={() => {
           if (loading) {
-            return <ActivityIndicator size="small" color={colors.primary} />;
+            return <ActivityIndicator size='small' color={colors.primary} />;
           }
         }}
         onPressLeft={() => {
@@ -164,8 +158,7 @@ export default function SearchHistory({ navigation }) {
       <KeyboardAvoidingView
         behavior={Platform.OS === "android" ? "height" : "padding"}
         keyboardVerticalOffset={offsetKeyboard}
-        style={{ flex: 1, padding: 10 }}
-      >
+        style={{ flex: 1, padding: 10 }}>
         <TextInput
           onChangeText={(text) => searchFilterFunction(text)}
           onClear={(text) => searchFilterFunction("")}
@@ -176,17 +169,15 @@ export default function SearchHistory({ navigation }) {
               onPress={() => {
                 searchFilterFunction("");
               }}
-              style={styles.btnClearSearch}
-            >
-              <Icon name="times" size={18} color={BaseColor.grayColor} />
+              style={styles.btnClearSearch}>
+              <Icon name='times' size={18} color={BaseColor.grayColor} />
             </TouchableOpacity>
           }
         />
 
         <Text
           style={{ marginBottom: 10, marginTop: 25, marginLeft: 15 }}
-          headline
-        >
+          headline>
           {t("SEARCH RESULT").toUpperCase()} {filteredDataSource.length}{" "}
         </Text>
 

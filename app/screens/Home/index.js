@@ -17,7 +17,7 @@ export default function News({ navigation }) {
   const onScroll = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60cb644c838c09001e1b60ed/informations`)
+      .get(`tenant/6156d6cac0c87c001e3f0a0b/informations`)
       .then((json) => {
         setInformation(json.data.rows);
         setRefreshing(false);
@@ -39,7 +39,7 @@ export default function News({ navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60cb644c838c09001e1b60ed/informations?limit=${offset}`)
+      .get(`tenant/6156d6cac0c87c001e3f0a0b/informations?limit=${offset}`)
       .then((json) => {
         setOffset(offset + 6);
         setInformation(json.data.rows);
@@ -188,12 +188,12 @@ export default function News({ navigation }) {
     <SafeAreaView style={BaseStyle.safeAreaView} forceInset={{ top: "always" }}>
       <Header
         title={t("MIGRIGHTS")}
-        subTitle=""
+        subTitle=''
         renderRight={() => {
-          return <Icon name="search" size={22} color={colors.primary} />;
+          return <Icon name='search' size={22} color={colors.primary} />;
         }}
         renderLeft={() => {
-          return <Icon name="th" size={22} color={colors.primary} />;
+          return <Icon name='th' size={22} color={colors.primary} />;
         }}
         onPressRight={() => {
           navigation.navigate("SearchHistory");

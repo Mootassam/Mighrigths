@@ -5,7 +5,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   content: {
     position: "absolute",
@@ -14,10 +14,10 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   logo: {
-    width: 120,
-    height: 120
-  }
+    width: 300,
+    height: 300,
+  },
 });

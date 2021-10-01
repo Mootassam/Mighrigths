@@ -43,7 +43,7 @@ export default function Hotel({ route, navigation }) {
 
     authAxios
       .get(
-        `tenant/60cb644c838c09001e1b60ed/informations?filter[category]=${infoId}&limit=${offset}`
+        `tenant/6156d6cac0c87c001e3f0a0b/informations?filter[category]=${infoId}&limit=${offset}`
       )
 
       .then((json) => {
@@ -177,8 +177,7 @@ export default function Hotel({ route, navigation }) {
             {
               transform: [{ translateY: navbarTranslate }],
             },
-          ]}
-        ></Animated.View>
+          ]}></Animated.View>
       </View>
     );
   };
@@ -191,7 +190,7 @@ export default function Hotel({ route, navigation }) {
         renderLeft={() => {
           return (
             <Icon
-              name="arrow-left"
+              name='arrow-left'
               size={20}
               color={colors.primary}
               enableRTL={true}
@@ -199,7 +198,7 @@ export default function Hotel({ route, navigation }) {
           );
         }}
         renderRight={() => {
-          return <Icon name="filter" size={22} color={colors.primary} />;
+          return <Icon name='filter' size={22} color={colors.primary} />;
         }}
         onPressLeft={() => {
           navigation.goBack();

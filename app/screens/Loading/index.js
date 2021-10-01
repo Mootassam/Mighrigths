@@ -25,14 +25,14 @@ export default function Loading({ navigation }) {
   }, []);
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Image source={Images.logo} style={styles.logo} resizeMode="contain" />
+    <View style={[styles.container, { backgroundColor: "#E6E6E6" }]}>
+      <Image source={Images.logo} style={styles.logo} resizeMode='contain' />
       <View style={styles.content}>
-        <Text title1 whiteColor semibold>
+        {/* <Text title1 whiteColor semibold>
           MigRights
-        </Text>
+        </Text> */}
         <ActivityIndicator
-          size="large"
+          size='large'
           color={BaseColor.whiteColor}
           style={{
             marginTop: 20,

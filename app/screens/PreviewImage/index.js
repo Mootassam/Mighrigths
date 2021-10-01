@@ -25,7 +25,7 @@ export default function PreviewImage({ route, navigation }) {
   useEffect(() => {
     setLoading(true);
     authAxios
-      .get(`tenant/60cb644c838c09001e1b60ed/informations/${imageId}`)
+      .get(`tenant/6156d6cac0c87c001e3f0a0b/informations/${imageId}`)
       .then((json) => {
         setImages(json.data.images);
 
@@ -79,18 +79,17 @@ export default function PreviewImage({ route, navigation }) {
   return (
     <SafeAreaView
       style={[BaseStyle.safeAreaView, { backgroundColor: "black" }]}
-      forceInset={{ top: "always" }}
-    >
+      forceInset={{ top: "always" }}>
       <Header
         style={{ backgroundColor: "black" }}
-        title=""
+        title=''
         renderRight={() => {
-          return <Icon name="times" size={20} color={BaseColor.whiteColor} />;
+          return <Icon name='times' size={20} color={BaseColor.whiteColor} />;
         }}
         onPressRight={() => {
           navigation.goBack();
         }}
-        barStyle="light-content"
+        barStyle='light-content'
       />
       <Swiper
         ref={(ref) => {
@@ -103,14 +102,13 @@ export default function PreviewImage({ route, navigation }) {
         loop={false}
         activeDotColor={colors.primary}
         removeClippedSubviews={false}
-        onIndexChanged={(index) => onSelect(index)}
-      >
+        onIndexChanged={(index) => onSelect(index)}>
         {images.map((item, key) => {
           return (
             <Image
               key={key}
               style={{ width: "100%", height: "100%" }}
-              resizeMode="contain"
+              resizeMode='contain'
               source={{
                 uri: `${item.downloadUrl}`,
               }}
@@ -121,12 +119,11 @@ export default function PreviewImage({ route, navigation }) {
       <View
         style={{
           paddingVertical: 10,
-        }}
-      >
+        }}>
         <View style={styles.lineText}>
           <Text body2 whiteColor>
             {loading ? (
-              <ActivityIndicator size="small" color={colors.primary} />
+              <ActivityIndicator size='small' color={colors.primary} />
             ) : null}
           </Text>
           <Text body2 whiteColor>
@@ -146,8 +143,7 @@ export default function PreviewImage({ route, navigation }) {
               onPress={() => {
                 onTouchImage(index);
               }}
-              activeOpacity={0.9}
-            >
+              activeOpacity={0.9}>
               <Image
                 style={{
                   width: 70,

@@ -22,7 +22,7 @@ export default function HotelDetail({ route, navigation }) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     authAxios
-      .get(`tenant/60cb644c838c09001e1b60ed/informations/${infoId}`)
+      .get(`tenant/6156d6cac0c87c001e3f0a0b/informations/${infoId}`)
       .then((json) => {
         setcategory([json.data]);
         for (const iterator of json.data.images) {
@@ -130,11 +130,11 @@ export default function HotelDetail({ route, navigation }) {
       <SafeAreaView style={{ flex: 1 }} forceInset={{ top: "always" }}>
         {/* Header */}
         <Header
-          title=""
+          title=''
           renderLeft={() => {
             return (
               <Icon
-                name="arrow-left"
+                name='arrow-left'
                 size={20}
                 color={colors.primary}
                 enableRTL={true}
@@ -142,7 +142,7 @@ export default function HotelDetail({ route, navigation }) {
             );
           }}
           renderRight={() => {
-            return <Icon name="images" size={20} color={colors.primary} />;
+            return <Icon name='images' size={20} color={colors.primary} />;
           }}
           onPressLeft={() => {
             navigation.goBack();

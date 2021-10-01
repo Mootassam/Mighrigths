@@ -3,22 +3,22 @@ import { View, TouchableOpacity, Image } from "react-native";
 import { Text, Icon } from "@components";
 import { useTheme, Images } from "@config";
 import PropTypes from "prop-types";
-import Moment from 'moment';
+import Moment from "moment";
 import styles from "./styles";
 import { useSelector } from "react-redux";
 
 function HotelItem(props) {
   const { colors } = useTheme();
-  const { block, style, image, name, location, onPress,description } = props;
+  const { block, style, image, name, location, onPress, description } = props;
   const no_image = image ? { uri: `${image.downloadUrl}` } : Images.image;
   const language = useSelector((state) => state.application.language);
-   if(language === "fr" || language === "en"){
-  var date =Moment(location).subtract(10, 'days').calendar()
-   }
-   else{ 
-  var date =Moment(location).format('YYYY-MM-DD')
-   }
-
+  if (language === "fr") {
+    var date = Moment(location).format("DD-MM-YYYY");
+  } else if (language === "en") {
+    var date = Moment(location).format("DD-MM-YYYY");
+  } else {
+    var date = Moment(location).format("YYYY-MM-DD");
+  }
 
   const renderBlock = () => {
     return (
@@ -36,7 +36,7 @@ function HotelItem(props) {
             {name}
           </Text>
           <View style={styles.blockContentAddress}>
-            <Icon name="calendar-week" color={colors.primaryLight} size={10} />  
+            <Icon name='calendar-week' color={colors.primaryLight} size={10} />
 
             <Text
               caption1
@@ -44,10 +44,8 @@ function HotelItem(props) {
               style={{
                 marginLeft: 3,
               }}
-              numberOfLines={1}
-            > 
-        
-        {date}
+              numberOfLines={1}>
+              {date}
             </Text>
           </View>
         </View>
@@ -62,13 +60,11 @@ function HotelItem(props) {
     return (
       <View style={[styles.listContent, style]}>
         <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-     
-            <Image
-                 resizeMode={"cover"}
-                 source={no_image}
-              style={styles.listImage}
-            />
-        
+          <Image
+            resizeMode={"cover"}
+            source={no_image}
+            style={styles.listImage}
+          />
         </TouchableOpacity>
         <View style={styles.listContentRight}>
           <Text headline semibold numberOfLines={1}>
@@ -81,36 +77,29 @@ function HotelItem(props) {
               style={{
                 marginLeft: 6,
               }}
-              numberOfLines={5}
-            >
+              numberOfLines={5}>
               {description}
             </Text>
           </View>
 
-
           <View style={styles.listContentRow}>
-            <Icon name="calendar-week" color={colors.primaryLight} size={10} />
+            <Icon name='calendar-week' color={colors.primaryLight} size={10} />
             <Text
               caption1
               grayColor
               style={{
                 marginLeft: 3,
               }}
-              numberOfLines={1}
-            >
-               {date}
+              numberOfLines={1}>
+              {date}
             </Text>
           </View>
-
-
         </View>
       </View>
     );
   };
 
- 
-
- if (block) return renderBlock();
+  if (block) return renderBlock();
   else return renderList();
 }
 
@@ -134,7 +123,7 @@ HotelItem.defaultProps = {
   block: false,
   name: "",
   location: "",
-  description:"",
+  description: "",
   services: [],
   onPress: () => {},
   onPressTag: () => {},
